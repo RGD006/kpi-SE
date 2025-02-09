@@ -23,22 +23,6 @@ int main()
 
   std::cout << "Success SDL Init!" << std::endl;
 
-  if (!MainWindow)
-  {
-    std::cout << "SDL2 ERROR (Window): " << SDL_GetError() << std::endl;
-    SDL_Quit();
-    return 1;
-  }
-
-  if (!Surface)
-  {
-    std::cout << "SDL2 ERROR (Surface): " << SDL_GetError() << std::endl;
-    SDL_DestroyWindow(MainWindow);
-    SDL_Quit();
-    return 1;
-  }
-
-
   for (;;)
   {
     for (; SDL_PollEvent(&Event);)
