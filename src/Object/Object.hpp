@@ -2,20 +2,26 @@
 #define OBJECT_H
 
 #include <stdint.h>
+#include <SDL2/SDL.h>
 
 class Object
 {
-private:
-  uint32_t x, y;
-  uint32_t width, height;
+protected:
+  int32_t x, y;
+  int32_t width, height;
+  SDL_Surface *surface;
 
 public:
-  Object(const uint32_t _x, const uint32_t _y, const uint32_t _width, const uint32_t _height);
+  Object(const int32_t _x, const int32_t _y,
+         const int32_t _width, const int32_t _height);
+  ~Object();
   virtual void showObject();
-  uint32_t getX();
-  uint32_t getY();
-  uint32_t getWidth();
-  uint32_t getHeight();
+  void setSurface(SDL_Surface *surface);
+  int32_t getX();
+  int32_t getY();
+  int32_t getWidth();
+  int32_t getHeight();
+  SDL_Surface *getSurface();
 };
 
 #endif

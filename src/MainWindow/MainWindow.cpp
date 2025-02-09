@@ -5,10 +5,10 @@
 
 #define SECOND (1000)
 
-MainWindow::MainWindow(const uint32_t _window_width, const uint32_t _window_height,
+MainWindow::MainWindow(const int32_t _window_width, const int32_t _window_height,
                        const uint32_t _window_background, const std::string _window_title,
-                       const uint32_t frame_rate)
-    : window_width(_window_width), window_height(_window_height), window_background(_window_background),
+                       const int32_t frame_rate)
+    : window_width(_window_width), window_height(_window_height),
       window_title(std::move(_window_title)), frame_rate(SECOND / frame_rate)
 {
   window = SDL_CreateWindow(window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -28,6 +28,11 @@ MainWindow::MainWindow(const uint32_t _window_width, const uint32_t _window_heig
     SDL_DestroyWindow(window);
     SDL_Quit();
   }
+
+  window_background = SDL_MapRGB(surface->format,
+                                 ((_window_background >> 16) & 0xFF),
+                                 ((_window_background >> 8) & 0xFF),
+                                 (_window_background & 0xFF));
 }
 
 MainWindow::~MainWindow()
@@ -35,29 +40,45 @@ MainWindow::~MainWindow()
   SDL_DestroyWindow(window);
 }
 
-void MainWindow::setFrameRate(const uint32_t _frame_rate)
+void MainWindow::addObject(Object *object)
+{
+  object->setSurface(surface);
+  objects.emplace_back(object);
+}
+
+void MainWindow::setFrameRate(const int32_t _frame_rate)
 {
   frame_rate = SECOND / _frame_rate;
 }
 
 exit_status MainWindow::show()
 {
+  SDL_Rect frame_background = {.x = 0, .y = 0, .w = window_width, .h = window_height};
+
   for (;;)
   {
-    uint32_t event_type = event_handler.getEvent();
+    int32_t event_type = event_handler.getEvent();
     if (event_type == SDL_QUIT)
     {
-      return exit_status::SUCCESS_EXIT; 
+      break;
     }
     else if (event_type == INT32_MAX)
     {
       std::cerr << "Unhandled event" << std::endl;
-      return exit_status::FAILED_EXIT; 
+      break;
+    }
+
+    // update buffer
+    SDL_FillRect(surface, &frame_background, window_background);
+
+    for (auto object : objects)
+    {
+      object->showObject();
     }
 
     SDL_Delay(frame_rate);
     SDL_UpdateWindowSurface(window);
   }
 
-  return exit_status::SUCCESS_EXIT;  
+  return exit_status::SUCCESS_EXIT;
 }
