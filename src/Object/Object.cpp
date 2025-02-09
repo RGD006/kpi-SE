@@ -1,4 +1,4 @@
-#include "Object.h"
+#include "Object.hpp"
 #include <SDL2/SDL.h>
 
 Object::Object(const uint32_t _x, const uint32_t _y, const uint32_t _width, const uint32_t _height)

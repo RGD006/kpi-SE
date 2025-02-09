@@ -1,6 +1,7 @@
-#include "MainWindow.h"
+#include "MainWindow.hpp"
 #include <utility>
 #include <stdexcept>
+#include <iostream>
 
 #define SECOND (1000)
 
@@ -39,15 +40,24 @@ void MainWindow::setFrameRate(const uint32_t _frame_rate)
   frame_rate = SECOND / _frame_rate;
 }
 
-exit_status_e MainWindow::showWindow()
+exit_status MainWindow::show()
 {
   for (;;)
   {
-    // TODO: EventHandler
+    uint32_t event_type = event_handler.getEvent();
+    if (event_type == SDL_QUIT)
+    {
+      return exit_status::SUCCESS_EXIT; 
+    }
+    else if (event_type == INT32_MAX)
+    {
+      std::cerr << "Unhandled event" << std::endl;
+      return exit_status::FAILED_EXIT; 
+    }
 
     SDL_Delay(frame_rate);
     SDL_UpdateWindowSurface(window);
   }
 
-  return exit_status_e::SUCCESS_EXIT;
+  return exit_status::SUCCESS_EXIT;  
 }
