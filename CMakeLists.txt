@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.21)
-project(bitmap-graphic-editor)
+project(bitmap_graphic)
 
 find_package(SDL2 REQUIRED)
 
-include_directories(bitmap-graphic-editor/src/MainWindow/include)
+include_directories(src src/MainWindow src/Object src/EventHandler src/Rectangle src/Circle)
 
-add_executable(bitmap-graphic-editor 
+add_executable(bitmap_graphic 
                 src/main.cpp
                 src/MainWindow/MainWindow.cpp
-)
+                src/Object/Object.cpp
+                src/Rectangle/Rectangle.cpp
+                src/Circle/Circle.cpp
+                src/EventHandler/EventHandler.cpp
+) 
 
-set_property(TARGET bitmap-graphic-editor PROPERTY CXX_STANDARD 20)
+set_property(TARGET bitmap_graphic PROPERTY CXX_STANDARD 20)
 
-target_link_libraries(bitmap-graphic-editor SDL2)
+target_link_libraries(bitmap_graphic SDL2)
