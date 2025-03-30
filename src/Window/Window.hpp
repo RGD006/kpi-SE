@@ -12,7 +12,7 @@ private:
     Canvas canvas;
 public:
     Window(const char *, u32, u32);
-    void showWindow(void);
+    void run(void);
 };
 
 void exitWindow(void *);

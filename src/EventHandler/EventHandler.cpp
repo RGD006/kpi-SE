@@ -26,10 +26,10 @@ void EventHandler::run(void)
 {
     while (SDL_PollEvent(&incoming_event))
     {
-        std::cout << incoming_event.type << std::endl;
+        // std::cout << "Event type: " << incoming_event.type << std::endl;
         if (events.contains(incoming_event.type))
         {
-            std::cout << "Handled event: " << incoming_event.type << std::endl;
+            // std::cout << "Handled event: " << incoming_event.type << std::endl;
             auto evnt = events.at(incoming_event.type);
             evnt.function(evnt.arg);
         }

@@ -1,3 +1,4 @@
+#pragma once
 #include <SDL2/SDL_render.h>
 #include <typeof.hpp>
 
@@ -14,15 +15,18 @@ class IObject
 protected:
     color_t color;
     SDL_Point center_point;
-    u32 w;
-    u32 h;
+    i32 w;
+    i32 h;
 
-protected:
+public:
+    IObject();
     IObject(u32, u32, SDL_Point);
-    void setColor(color_t);
-    color_t getColor(void);
-    u32 getW(void);
-    u32 getH(void);
-    SDL_Point getCenterPoints(void);
-    void drawObject(SDL_Renderer *);
+    virtual void setColor(color_t);
+    virtual color_t getColor(void);
+    virtual u32 getW(void);
+    virtual u32 getH(void);
+    virtual SDL_Point getCenterPoints(void);
+    virtual void drawObject(SDL_Renderer *);
 };
+
+SDL_Point createPoint(i32, i32);

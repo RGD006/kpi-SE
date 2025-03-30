@@ -6,7 +6,7 @@
 int main()
 {
   Window window("Main", 500, 500);
-  window.showWindow();
+  window.run();
 
   std::cout << "end" << std::endl;
 
