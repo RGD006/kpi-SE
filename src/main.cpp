@@ -1,12 +1,14 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "MainWindow.hpp"
-#include "Rectangle.hpp"
-#include "Circle.hpp"
+#include "Window.hpp"
 
-constexpr int32_t window_width = 800, window_height = 800, fps = 60;
 
 int main()
 {
+  Window window("Main", 500, 500);
+  window.showWindow();
+
+  std::cout << "end" << std::endl;
+
   return 0;
 }
