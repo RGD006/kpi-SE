@@ -28,6 +28,9 @@ void Window::run(void)
     Rectangle rect_2(100, 100, createPoint(200, 200));
     canvas.addObject(&rect_1);
     canvas.addObject(&rect_2);
+    Rectangle rect_3(100, 100, createPoint(150, 150));
+    rect_3.setColor(color_t(0x152ff112));
+    canvas.addObject(&rect_3);
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
 
     while (window_run)
@@ -35,4 +38,4 @@ void Window::run(void)
         canvas.render();
         event_handler.run();
     }
-}
+} 

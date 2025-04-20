@@ -17,15 +17,27 @@ Canvas::Canvas(SDL_Window *window, SDL_Point center_point)
 
 void Canvas::addObject(IObject *object)
 {
-    objects.push_back(object);
+    objects.push(object);
 }
 
 void Canvas::render()
 {
-    for (IObject *object : objects)
+    if (objects.empty())
     {
-        object->drawObject(renderer);
+        return;
+    }
+
+    while (!objects.empty())
+    {
+        objects.front()->drawObject(renderer);
+        objects.pop();
     }
 
     SDL_RenderPresent(renderer);
 }
+
+size_t Canvas::getNumberOfObjects()
+{
+    return objects.size();
+}
+
