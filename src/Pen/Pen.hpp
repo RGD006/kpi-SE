@@ -1,5 +1,6 @@
+#pragma once
 #include <SDL2/SDL.h>
-#include "Object.hpp"
+#include "Shapes.hpp"
 #include "EventHandler.hpp"
 
 class Pen

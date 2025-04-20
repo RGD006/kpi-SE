@@ -7,18 +7,17 @@ include_directories(src
                     src/Window 
                     src/Object 
                     src/EventHandler 
-                    src/Rectangle 
-                    src/Circle 
                     src/Canvas
                     src/Pen                    
+                    src/Shapes
 )
 
 add_executable(bitmap_graphic 
                 src/main.cpp
                 src/Window/Window.cpp
                 src/Object/Object.cpp
-                src/Rectangle/Rectangle.cpp
-                src/Circle/Circle.cpp
+                src/Shapes/Rectangle.cpp
+                src/Shapes/Circle.cpp
                 src/EventHandler/EventHandler.cpp
                 src/Canvas/Canvas.cpp
                 src/Pen/Pen.cpp
