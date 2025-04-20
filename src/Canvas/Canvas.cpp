@@ -27,7 +27,7 @@ void Canvas::render()
         return;
     }
 
-    while (!objects.empty())
+    while (!objects.empty()) 
     {
         objects.front()->drawObject(renderer);
         objects.pop();

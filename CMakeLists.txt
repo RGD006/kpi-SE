@@ -3,7 +3,15 @@ project(bitmap_graphic)
 
 find_package(SDL2 REQUIRED)
 
-include_directories(src src/Window src/Object src/EventHandler src/Rectangle src/Circle src/Canvas)
+include_directories(src 
+                    src/Window 
+                    src/Object 
+                    src/EventHandler 
+                    src/Rectangle 
+                    src/Circle 
+                    src/Canvas
+                    src/Pen                    
+)
 
 add_executable(bitmap_graphic 
                 src/main.cpp
@@ -13,6 +21,7 @@ add_executable(bitmap_graphic
                 src/Circle/Circle.cpp
                 src/EventHandler/EventHandler.cpp
                 src/Canvas/Canvas.cpp
+                src/Pen/Pen.cpp
 ) 
 
 set_property(TARGET bitmap_graphic PROPERTY CXX_STANDARD 20)

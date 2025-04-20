@@ -1,5 +1,6 @@
 #include <Window.hpp>
 #include "Rectangle.hpp"
+#include <Circle.hpp>
 #include <iostream>
 
 void exitWindow(void *arg)
@@ -9,6 +10,7 @@ void exitWindow(void *arg)
 }
 
 Window::Window(const char *window_title, u32 w, u32 h)
+    : width(w), height(h)
 {
     window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, 0);
     canvas = Canvas(window, createPoint(0, 0));
@@ -23,14 +25,12 @@ Window::Window(const char *window_title, u32 w, u32 h)
 void Window::run(void)
 {
     bool window_run = true;
-    Rectangle rect_1(30, 30, createPoint(50, 50));
-    rect_1.setColor(color_t(0xfaba11ff));
-    Rectangle rect_2(100, 100, createPoint(200, 200));
-    canvas.addObject(&rect_1);
-    canvas.addObject(&rect_2);
-    Rectangle rect_3(100, 100, createPoint(150, 150));
-    rect_3.setColor(color_t(0x152ff112));
-    canvas.addObject(&rect_3);
+    Rectangle background(width, height, createPoint(0, 0));
+    
+    Circle cicrle(50, (SDL_Point){100, 100}, false);
+    cicrle.setColor(0xcf1b1b);
+    canvas.addObject(&cicrle);
+
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
 
     while (window_run)
