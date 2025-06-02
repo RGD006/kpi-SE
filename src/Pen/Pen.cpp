@@ -1,8 +1,7 @@
 #include "Pen.hpp"
 #include "SDL2/SDL_events.h"
-#include "Canvas.hpp"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 Pen::Pen()
 {
@@ -66,15 +65,39 @@ Pen::~Pen()
     delete shape;
 }
 
-void Pen::bindEventHandler(EventHandler *event_handler)
+void Pen::addCanvas(Canvas *canvas)
 {
-    bind_event_handler = event_handler;
+    this->canvas = canvas;
 }
 
-void Pen::mouseButtonEvent(void *arg)
+void Pen::eventHandler(void)
 {
-   Canvas *canvas = reinterpret_cast<Canvas *>(arg);
-   u32 pos_x = bind_event_handler->getEvent().button.x;
-   u32 pos_y = bind_event_handler->getEvent().button.y;
-   canvas->addObject(drawShape(createPoint(pos_x, pos_y)));
+    SDL_Event mouse_event;
+    bool start_move = false;
+    int x, y;
+    while (SDL_PollEvent(&mouse_event))
+    {
+        if (mouse_event.type == SDL_MOUSEBUTTONDOWN)
+        {
+            start_move = true; 
+            if (mouse_event.button.button == SDL_BUTTON_LEFT)
+            {
+                SDL_GetMouseState(&x, &y);
+                canvas->addObject(drawShape(createPoint(x, y)));
+                std::cout << "Mouse event: " << x << " " << y << std::endl;
+            }
+        }
+        else if (mouse_event.type == SDL_MOUSEBUTTONUP)
+        {
+            start_move = false;
+        }
+        else if (mouse_event.type == SDL_MOUSEMOTION)
+        {
+            if (start_move)
+            {
+                SDL_GetMouseState(&x, &y);
+                std::cout << "x: " << x << " " << "y: " << y << std::endl;
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 #include <Window.hpp>
 #include "Shapes.hpp"
+#include "Pen.hpp"
 #include <iostream>
 
 void exitWindow(void *arg)
@@ -25,15 +26,15 @@ void Window::run(void)
 {
     bool window_run = true;
     Rectangle background(width, height, createPoint(0, 0));
-    
-    Circle cicrle(50, (SDL_Point){100, 100}, false);
-    cicrle.setColor(0xcf1b1b);
-    canvas.addObject(&cicrle);
 
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
 
+    Pen pen;
+    pen.addCanvas(&canvas);
+
     while (window_run)
     {
+        pen.eventHandler();
         canvas.render();
         event_handler.run();
     }
