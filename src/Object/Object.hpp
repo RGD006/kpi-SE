@@ -27,6 +27,7 @@ public:
     virtual u32 getH(void);
     virtual SDL_Point getCenterPoints(void);
     virtual void drawObject(SDL_Renderer *);
+    virtual void setCenterPoints(SDL_Point);
 };
 
 SDL_Point createPoint(i32, i32);

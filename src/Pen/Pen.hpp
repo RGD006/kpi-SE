@@ -8,11 +8,17 @@ class Pen
 private:
     color_t color;
     IObject *shape;
+    EventHandler *bind_event_handler;
 
 public:
+    Pen();
     Pen(color_t);
     Pen(IObject *);
     Pen(color_t, IObject *);
     void changePen(IObject *);
-    IObject *getShape();
+    void deletePen();
+    IObject *drawShape(SDL_Point);
+    void bindEventHandler(EventHandler *);
+    void mouseButtonEvent(void *);
+    ~Pen();
 };

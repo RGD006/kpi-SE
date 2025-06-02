@@ -41,3 +41,5 @@ size_t Canvas::getNumberOfObjects()
     return objects.size();
 }
 
+Pen Canvas::getPen() { return pen; }
+

@@ -1,6 +1,5 @@
 #include <Window.hpp>
-#include "Rectangle.hpp"
-#include <Circle.hpp>
+#include "Shapes.hpp"
 #include <iostream>
 
 void exitWindow(void *arg)

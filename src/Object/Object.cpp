@@ -41,3 +41,5 @@ u32 IObject::getW(void) { return w; }
 u32 IObject::getH(void) { return h; }
 SDL_Point IObject::getCenterPoints(void) { return center_point; }
 void IObject::drawObject(SDL_Renderer *) {}
+void IObject::setCenterPoints(SDL_Point new_points) { center_point = new_points; }
+

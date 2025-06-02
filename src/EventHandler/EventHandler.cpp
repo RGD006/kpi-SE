@@ -11,7 +11,7 @@ event_function_t::event_function_t()
     this->function = nullptr;
 }
 
-event_function_t::event_function_t(std::function<void(void*)> function, void *arg)
+event_function_t::event_function_t(std::function<void(void *)> function, void *arg)
 {
     this->arg = arg;
     this->function = function;
@@ -34,4 +34,9 @@ void EventHandler::run(void)
             evnt.function(evnt.arg);
         }
     }
+}
+
+SDL_Event EventHandler::getEvent()
+{
+    return incoming_event;
 }

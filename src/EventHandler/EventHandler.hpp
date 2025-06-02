@@ -20,5 +20,6 @@ private:
 public:
     EventHandler();
     void addEvent(u32, std::function<void(void*)>, void *);
+    SDL_Event getEvent();
     void run(void);
 };
