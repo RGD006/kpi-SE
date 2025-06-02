@@ -25,10 +25,12 @@ void Window::run(void)
 {
     bool window_run = true;
     Rectangle background(width, height, createPoint(0, 0));
+    Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
+    rect->setColor(color_t(0xFFD66B));
 
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
 
-    Pen pen;
+    Pen pen(rect);
     pen.addCanvas(&canvas);
 
     auto pen_mouse_down_evnt = [&pen](void *arg)
@@ -47,4 +49,5 @@ void Window::run(void)
         event_handler.run();
         canvas.render();
     }
+
 }

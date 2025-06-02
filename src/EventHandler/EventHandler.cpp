@@ -26,12 +26,13 @@ event_function_t::event_function_t(std::function<void(void*)> function, void *ar
 
 void EventHandler::addEvent(u32 new_event, std::function<void(void *)> function, void *arg)
 {
+    // std::cout << "Add event: " << new_event << std::endl;
     events[new_event] = event_function_t(function, arg);
 }
 
 void EventHandler::addButtonEvent(u32 new_event, u32 button, std::function<void(void *)> function, void *arg)
 {
-    std::cout << "Add event: " << new_event << std::endl;
+    // std::cout << "Add button event: " << new_event << std::endl;
     button_events[new_event] = event_function_t(function, arg, button);
 }
 
