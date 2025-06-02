@@ -70,34 +70,36 @@ void Pen::addCanvas(Canvas *canvas)
     this->canvas = canvas;
 }
 
-void Pen::eventHandler(void)
+void Pen::eventMouseDown(void *arg)
 {
-    SDL_Event mouse_event;
-    bool start_move = false;
+    bool *start_move = reinterpret_cast<bool *>(arg);
     int x, y;
-    while (SDL_PollEvent(&mouse_event))
+    *start_move = true;
+    SDL_GetMouseState(&x, &y);
+    canvas->addObject(drawShape(createPoint(x, y)));
+    // std::cout << "Mouse down event: " << x << " " << y << std::endl;
+}
+
+void Pen::eventMouseMove(void *arg)
+{
+    bool *start_move = reinterpret_cast<bool *>(arg);
+    int x, y;
+    if (*start_move)
     {
-        if (mouse_event.type == SDL_MOUSEBUTTONDOWN)
-        {
-            start_move = true; 
-            if (mouse_event.button.button == SDL_BUTTON_LEFT)
-            {
-                SDL_GetMouseState(&x, &y);
-                canvas->addObject(drawShape(createPoint(x, y)));
-                std::cout << "Mouse event: " << x << " " << y << std::endl;
-            }
-        }
-        else if (mouse_event.type == SDL_MOUSEBUTTONUP)
-        {
-            start_move = false;
-        }
-        else if (mouse_event.type == SDL_MOUSEMOTION)
-        {
-            if (start_move)
-            {
-                SDL_GetMouseState(&x, &y);
-                std::cout << "x: " << x << " " << "y: " << y << std::endl;
-            }
-        }
+        SDL_GetMouseState(&x, &y);
+        canvas->addObject(drawShape(createPoint(x, y)));
+        // std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
     }
 }
+
+void Pen::eventMouseUp(void *arg)
+{
+    bool *start_move = reinterpret_cast<bool *>(arg);
+    if (*start_move)
+    {
+        *start_move = false;
+        // std::cout << "Stop draw event" << std::endl;
+    }
+}
+
+bool *Pen::getMoveState() { return &start_move; }

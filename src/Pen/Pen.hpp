@@ -9,16 +9,20 @@ private:
     color_t color;
     IObject *shape;
     Canvas *canvas;
-    
-    public:
+    bool start_move; // flag for indication if mouse move in drawing mode
+
+public:
     Pen();
     Pen(color_t);
     Pen(IObject *);
     Pen(color_t, IObject *);
     void changePen(IObject *);
     void deletePen();
-    void eventHandler(void);
+    void eventMouseDown(void *);
+    void eventMouseUp(void *);
+    void eventMouseMove(void *);
     void addCanvas(Canvas *canvas);
+    bool *getMoveState();
     IObject *drawShape(SDL_Point);
     ~Pen();
 };

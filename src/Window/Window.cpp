@@ -19,7 +19,6 @@ Window::Window(const char *window_title, u32 w, u32 h)
         std::cerr << "SDL_CreateWindow error:" << SDL_GetError() << "\n";
         exit(EXIT_FAILURE);
     }
-
 }
 
 void Window::run(void)
@@ -32,10 +31,20 @@ void Window::run(void)
     Pen pen;
     pen.addCanvas(&canvas);
 
+    auto pen_mouse_down_evnt = [&pen](void *arg)
+    { pen.eventMouseDown(arg); };
+    auto pen_mouse_move_evnt = [&pen](void *arg)
+    { pen.eventMouseMove(arg); };
+    auto pen_mouse_up_evnt = [&pen](void *arg)
+    { pen.eventMouseUp(arg); };
+
+    event_handler.addButtonEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
+    event_handler.addButtonEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
+    event_handler.addButtonEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());
+
     while (window_run)
     {
-        pen.eventHandler();
-        canvas.render();
         event_handler.run();
+        canvas.render();
     }
-} 
+}

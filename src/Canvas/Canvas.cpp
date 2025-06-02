@@ -24,6 +24,7 @@ void Canvas::render()
 {
     if (objects.empty())
     {
+        std::cout << "no draw" << std::endl;
         return;
     }
 
@@ -31,6 +32,7 @@ void Canvas::render()
     {
         objects.front()->drawObject(renderer);
         objects.pop();
+        std::cout << "draw" << std::endl;
     }
 
     SDL_RenderPresent(renderer);
