@@ -10,7 +10,7 @@ private:
     SDL_Window *window;
     EventHandler event_handler;
     Canvas canvas;
-    u32 width, height;
+    int width, height;
 public:
     Window(const char *, u32, u32);
     void run(void);

@@ -24,7 +24,7 @@ Pen::Pen(IObject *_shape)
     }
     else
     {
-        std::cerr << "New shape is NULL" << std::endl;
+        std::cerr << "New shape is nullptr" << std::endl;
         shape = new Circle(5, createPoint(0, 0), true);
     }
 }
@@ -38,7 +38,7 @@ Pen::Pen(color_t _color, IObject *_shape)
     }
     else
     {
-        std::cerr << "New shape is NULL" << std::endl;
+        std::cerr << "New shape is nullptr" << std::endl;
         shape = new Circle(5, createPoint(0, 0), true);
     }
 }

@@ -3,6 +3,8 @@
 #include "Pen.hpp"
 #include <iostream>
 
+constexpr int canvas_w = 500, canvas_h = 500;
+
 void exitWindow(void *arg)
 {
     *((bool *)arg) = false;
@@ -13,7 +15,7 @@ Window::Window(const char *window_title, u32 w, u32 h)
     : width(w), height(h)
 {
     window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, 0);
-    canvas = Canvas(window, createPoint(0, 0), 0, 0, w, h);
+    canvas = Canvas(window, createPoint(0, 0), w, h);
     if (!window)
     {
         std::cerr << "SDL_CreateWindow error:" << SDL_GetError() << "\n";
@@ -24,9 +26,19 @@ Window::Window(const char *window_title, u32 w, u32 h)
 void Window::run(void)
 {
     bool window_run = true;
-    Rectangle background(width, height, createPoint(0, 0));
+
+    SDL_Rect canvas_background = {
+        .x = 0,
+        .y = 0,
+        .w = width,
+        .h = height,
+    };
+    color_t color_canvas_background(0xFFFFFFFF);
+
+    canvas.setBackground(color_canvas_background, &canvas_background);
+    
     Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
-    rect->setColor(color_t(0xFFD66B));
+    rect->setColor(color_t(0x000000FF));
 
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
 

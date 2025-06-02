@@ -9,14 +9,14 @@ class Canvas
 private:
     SDL_Point window_pos;
     SDL_Renderer *renderer;
-    std::queue<IObject *> objects;
+    SDL_Texture *background_texture; 
     SDL_Texture *canvas_texture;
-    int pos_x, pos_y, w, h;
+    int w, h;
 
 public:
-    Canvas(SDL_Window *, SDL_Point, int, int, int, int);
+    Canvas(SDL_Window *, SDL_Point, int, int);
     Canvas();
     void render();
+    void setBackground(color_t, SDL_Rect *);
     void addObject(IObject *);
-    size_t getNumberOfObjects();
 };
