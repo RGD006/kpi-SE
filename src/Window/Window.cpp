@@ -13,7 +13,7 @@ Window::Window(const char *window_title, u32 w, u32 h)
     : width(w), height(h)
 {
     window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, 0);
-    canvas = Canvas(window, createPoint(0, 0));
+    canvas = Canvas(window, createPoint(0, 0), 0, 0, w, h);
     if (!window)
     {
         std::cerr << "SDL_CreateWindow error:" << SDL_GetError() << "\n";
