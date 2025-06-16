@@ -11,7 +11,6 @@ EventHandler::EventHandler()
     { this->mouse.releaseLeft(arg); };
 
     addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, mouse_down_evnt, nullptr);
-    addIOEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, mouse_move_evnt, nullptr);
     addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, mouse_up_evnt, nullptr);
 }
 
@@ -46,7 +45,7 @@ void EventHandler::addIOEvent(u32 new_event, u32 button, std::function<void(void
     io_events[new_event].push_back(event_function_t(function, arg, button));
 }
 
-void EventHandler::addButton(Button &button)
+void EventHandler::addButton(Button *button)
 {
     buttons.push_back(button);
 }
@@ -98,7 +97,7 @@ void EventHandler::run(void)
         // listen if button selected
         for (auto &button : buttons)
         {
-            button.listenMouse(mouse);
+            button->listenMouse(mouse);
         }
     }
 }

@@ -15,7 +15,7 @@ private:
     SDL_Renderer *renderer; 
     EventHandler event_handler;
     Canvas canvas;
-    std::vector<Button> buttons;
+    std::vector<Button*> buttons;
     int width, height;
 public:
     Window(const char *, u32, u32);

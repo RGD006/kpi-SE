@@ -8,7 +8,6 @@
 void exitWindow(void *arg)
 {
     *((bool *)arg) = false;
-    // std::cout << "Exit event" << std::endl;
 }
 
 Window::Window(const char *window_title, u32 w, u32 h)
@@ -59,9 +58,50 @@ void Window::run(void)
     { pen.eventMouseMove(arg); };
     auto pen_mouse_up_evnt = [&pen](void *arg)
     { pen.eventMouseUp(arg); };
+    auto pen_change_color = [&pen](void *arg)
+    { changePenColor(&pen, *reinterpret_cast<u32 *>(arg)); };
+
+    Button button_red(BUTTON_CHANGE_COLOR_RED, createRect(0, 0, 0, 0), color_button_dest_red, renderer, color_red);
+    Button button_yellow(BUTTON_CHANGE_COLOR_YELLOW, createRect(0, 0, 0, 0), color_button_dest_yellow, renderer, color_yellow);
+    Button button_blue(BUTTON_CHANGE_COLOR_BLUE, createRect(0, 0, 0, 0), color_button_dest_blue, renderer, color_blue);
+    Button button_green(BUTTON_CHANGE_COLOR_GREEN, createRect(0, 0, 0, 0), color_button_dest_green, renderer, color_green);
+    Button button_pink(BUTTON_CHANGE_COLOR_PINK, createRect(0, 0, 0, 0), color_button_dest_pink, renderer, color_pink);
+    Button button_purple(BUTTON_CHANGE_COLOR_PURPLE, createRect(0, 0, 0, 0), color_button_dest_purple, renderer, color_purple);
+    Button button_white(BUTTON_CHANGE_COLOR_WHITE, createRect(0, 0, 0, 0), color_button_dest_white, renderer, color_white);
+    Button button_grey(BUTTON_CHANGE_COLOR_GREY, createRect(0, 0, 0, 0), color_button_dest_grey, renderer, color_grey);
+    Button button_black(BUTTON_CHANGE_COLOR_BLACK, createRect(0, 0, 0, 0), color_button_dest_black, renderer, color_black);
+
+    buttons.push_back(&button_red);
+    buttons.push_back(&button_yellow);
+    buttons.push_back(&button_blue);
+    buttons.push_back(&button_green);
+    buttons.push_back(&button_pink);
+    buttons.push_back(&button_purple);
+    buttons.push_back(&button_white);
+    buttons.push_back(&button_grey);
+    buttons.push_back(&button_black);
+
+    event_handler.addButton(&button_red);
+    event_handler.addButton(&button_yellow);
+    event_handler.addButton(&button_blue);
+    event_handler.addButton(&button_green);
+    event_handler.addButton(&button_pink);
+    event_handler.addButton(&button_purple);
+    event_handler.addButton(&button_white);
+    event_handler.addButton(&button_grey);
+    event_handler.addButton(&button_black);
 
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_RED, pen_change_color, reinterpret_cast<void *>(&color_red));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_YELLOW, pen_change_color, reinterpret_cast<void *>(&color_yellow));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_BLUE, pen_change_color, reinterpret_cast<void *>(&color_blue));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_GREEN, pen_change_color, reinterpret_cast<void *>(&color_green));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_PINK, pen_change_color, reinterpret_cast<void *>(&color_pink));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_PURPLE, pen_change_color, reinterpret_cast<void *>(&color_purple));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_WHITE, pen_change_color, reinterpret_cast<void *>(&color_white));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_GREY, pen_change_color, reinterpret_cast<void *>(&color_grey));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_BLACK, pen_change_color, reinterpret_cast<void *>(&color_black));
     event_handler.addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
     event_handler.addIOEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
     event_handler.addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());
@@ -77,7 +117,7 @@ void Window::run(void)
 
         for (auto &button : buttons)
         {
-            button.render();
+            button->render();
         }
 
         canvas.render();

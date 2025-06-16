@@ -27,13 +27,13 @@ private:
     SDL_Event incoming_event;
     std::map<u32, std::vector<event_function_t>> events;
     std::map<u32, std::vector<event_function_t>> io_events;
-    std::vector<Button> buttons;
+    std::vector<Button*> buttons;
 
 public:
     EventHandler();
     void addEvent(u32, std::function<void(void *)>, void *);
     void addIOEvent(u32, u32, std::function<void(void *)>, void *);
-    void addButton(Button&);
+    void addButton(Button*);
     SDL_Event getEvent();
     void run(void);
 };
