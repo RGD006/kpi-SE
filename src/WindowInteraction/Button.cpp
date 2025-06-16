@@ -32,12 +32,12 @@ void Button::setTexture(SDL_Texture *texture)
     this->texture = texture;
 }
 
-void Button::setTexture(SDL_Rect *rect, u32 color)
+void Button::setTexture(u32 color)
 {
     color_t rect_color(color);
     SDL_SetRenderTarget(renderer, texture);
     SDL_SetRenderDrawColor(renderer, rect_color.r, rect_color.g, rect_color.b, rect_color.a);
-    SDL_RenderFillRect(renderer, rect);
+    SDL_RenderFillRect(renderer, &d_rect);
 }
 
 void Button::setTexture(const char *path)

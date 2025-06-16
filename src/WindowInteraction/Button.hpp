@@ -20,7 +20,7 @@ public:
     Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, const char *path_to_texture);
     void setTexture(SDL_Texture *texture);
     void setTexture(const char *path);
-    void setTexture(SDL_Rect *rect, u32 color);
+    void setTexture(u32 color);
     void render(void);
     void listenMouse(Mouse &mouse);
     ~Button();
