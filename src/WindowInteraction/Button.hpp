@@ -15,9 +15,9 @@ private:
     SDL_Texture *texture;
 
 public:
-    Button(u32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render);
-    Button(u32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, SDL_Texture *texture);
-    Button(u32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, const char *path_to_texture);
+    Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render);
+    Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, SDL_Texture *texture);
+    Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, const char *path_to_texture);
     void setTexture(SDL_Texture *texture);
     void setTexture(const char *path);
     void render(void);

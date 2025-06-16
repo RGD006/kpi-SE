@@ -3,7 +3,16 @@
 
 EventHandler::EventHandler()
 {
-    mouse = Mouse();
+    auto mouse_down_evnt = [this](void *arg)
+    { this->mouse.pressLeft(arg); };
+    auto mouse_move_evnt = [this](void *arg)
+    { this->mouse.move(arg); };
+    auto mouse_up_evnt = [this](void *arg)
+    { this->mouse.releaseLeft(arg); };
+
+    addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, mouse_down_evnt, nullptr);
+    addIOEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, mouse_move_evnt, nullptr);
+    addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, mouse_up_evnt, nullptr);
 }
 
 event_function_t::event_function_t()
@@ -39,7 +48,7 @@ void EventHandler::addIOEvent(u32 new_event, u32 button, std::function<void(void
 
 void EventHandler::addButton(Button &button)
 {
-   buttons.push_back(button);
+    buttons.push_back(button);
 }
 
 void EventHandler::run(void)
@@ -47,7 +56,18 @@ void EventHandler::run(void)
     while (SDL_PollEvent(&incoming_event))
     {
         // std::cout << "Event type: " << incoming_event.type << std::endl;
-        if (events.contains(incoming_event.type))
+        if (incoming_event.type == SDL_USEREVENT)
+        {
+            if (events.contains(incoming_event.user.code))
+            {
+                auto evnt = events.at(incoming_event.user.code);
+                for (const auto &action : evnt)
+                {
+                    action.function(action.arg);
+                }
+            }
+        }
+        else if (events.contains(incoming_event.type))
         {
             // std::cout << "Handled event: " << incoming_event.type << std::endl;
             auto evnt = events.at(incoming_event.type);
@@ -72,11 +92,11 @@ void EventHandler::run(void)
                 }
             }
         }
-        
+
         /* Mouse events listening*/
 
         // listen if button selected
-        for (auto &button : buttons) 
+        for (auto &button : buttons)
         {
             button.listenMouse(mouse);
         }

@@ -3,7 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <fstream>
 
-Button::Button(u32 button_event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render)
+Button::Button(i32 button_event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render)
 {
     if (!_window_render)
         throw "window renderer is nullptr";
@@ -15,13 +15,13 @@ Button::Button(u32 button_event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_
     d_rect = _dest;
 }
 
-Button::Button(u32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, SDL_Texture *texture)
+Button::Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, SDL_Texture *texture)
 {
     *this = Button(event, _size, _dest, _window_render);
     setTexture(texture);
 }
 
-Button::Button(u32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, const char *path_to_texture)
+Button::Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, const char *path_to_texture)
 {
     *this = Button(event, _size, _dest, _window_render);
     setTexture(path_to_texture);
@@ -55,9 +55,7 @@ void Button::render()
 
 void Button::listenMouse(Mouse &mouse)
 {
-    SDL_Rect tip = *reinterpret_cast<SDL_Rect*>(mouse.mouseReleaseLeft());
-    std::cout << "x: " << tip.x << " y: " << tip.y << std::endl;
-    if (SDL_HasIntersection(&d_rect, reinterpret_cast<SDL_Rect*>(mouse.mouseReleaseLeft())) == SDL_TRUE)
+    if (SDL_HasIntersection(&d_rect, reinterpret_cast<SDL_Rect*>(mouse.releaseLeft(nullptr))) == SDL_TRUE)
     {
         std::cout << "Button is selected!" << std::endl;
         SDL_PushEvent(&event);

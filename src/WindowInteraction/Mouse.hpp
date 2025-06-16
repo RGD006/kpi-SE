@@ -15,11 +15,11 @@ private:
     
 public:
     SDL_Rect* interaction();
-    void* mouseMove();
-    void* mousePressLeft();
-    void* mousePressRight();
-    void* mouseReleaseLeft();
-    void* mouseReleaseRight();
+    void* move(void *);
+    void* pressLeft(void *);
+    void* pressRight(void *);
+    void* releaseLeft(void *);
+    void* releaseRight(void *);
     Mouse();
     ~Mouse();
 };

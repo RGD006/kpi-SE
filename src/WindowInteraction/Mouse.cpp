@@ -6,6 +6,8 @@ using namespace std;
 
 #define SHORT_CLICK_TIMEOUT_MS (100)
 
+// TODO: fix bug with mouse release
+
 Mouse::Mouse()
 {
     cursor = new SDL_Rect;
@@ -33,46 +35,50 @@ SDL_Rect *Mouse::interaction()
     return tip;
 }
 
-void *Mouse::mousePressLeft()
+void *Mouse::pressLeft(void *)
 {
     const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
     start_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
-
     is_holding = true;
 
     return nullptr;
 }
 
-void *Mouse::mousePressRight()
+void *Mouse::pressRight(void *)
 {
     return nullptr;
 }
 
-void *Mouse::mouseReleaseLeft()
+void *Mouse::releaseLeft(void *)
 {
-    const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
-    end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
-    is_holding = false;
-    SDL_GetMouseState(&tip->x, &tip->y);
-
-    if (end_click_time_ms - start_click_time_ms <= SHORT_CLICK_TIMEOUT_MS) 
+    if (is_holding)
     {
-        is_short_click = true;
-        return reinterpret_cast<void *>(tip);
+        is_holding = false;
+        const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
+        end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
+        SDL_GetMouseState(&tip->x, &tip->y);
+
+        if (end_click_time_ms - start_click_time_ms <= SHORT_CLICK_TIMEOUT_MS)
+        {
+            is_short_click = true;
+            return reinterpret_cast<void *>(tip);
+        }
+        else
+        {
+            is_long_click = true;
+            return reinterpret_cast<void *>(tip);
+        }
     }
-    else
-    {
-        is_long_click = true;
-        return reinterpret_cast<void *>(tip);
-    } 
+    
+    return nullptr;
 }
 
-void *Mouse::mouseReleaseRight()
+void *Mouse::releaseRight(void *)
 {
     return nullptr;
 }
 
-void *Mouse::mouseMove()
+void *Mouse::move(void *)
 {
     SDL_GetMouseState(&tip->x, &tip->y);
     return reinterpret_cast<void *>(tip);
