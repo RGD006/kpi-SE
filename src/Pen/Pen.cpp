@@ -73,7 +73,7 @@ void Pen::deletePen()
     delete shape;
 }
 
-IObject *Pen::drawShape(SDL_Point position)
+IObject *Pen::getShape(SDL_Point position)
 {
     shape->setCenterPoints(position);
     return shape;
@@ -97,7 +97,7 @@ void Pen::eventMouseDown(void *arg)
     SDL_GetMouseState(&x, &y);
     if (calculateScale(canvas->getScale(), x, y))
     {
-        canvas->addObject(drawShape(createPoint(x, y)));
+        canvas->addObject(getShape(createPoint(x, y)));
         // std::cout << "Mouse down event: " << x << " " << y << std::endl;
     }
 }
@@ -111,7 +111,7 @@ void Pen::eventMouseMove(void *arg)
         SDL_GetMouseState(&x, &y);
         if (calculateScale(canvas->getScale(), x, y))
         {
-            canvas->addObject(drawShape(createPoint(x, y)));
+            canvas->addObject(getShape(createPoint(x, y)));
             // std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
         }
     }

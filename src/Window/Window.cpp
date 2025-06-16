@@ -60,11 +60,6 @@ void Window::run(void)
     auto pen_mouse_up_evnt = [&pen](void *arg)
     { pen.eventMouseUp(arg); };
 
-    Button button_save = Button(BUTTON_SAVE, createRect(0, 0, 0, 0), createRect(0, 0, 100, 100), renderer, "images/cat.png");
-
-    buttons.push_back(button_save);
-    event_handler.addButton(button_save);
-
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());

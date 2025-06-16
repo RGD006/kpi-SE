@@ -25,6 +25,7 @@ add_executable(bitmap_graphic
                 src/Pen/Pen.cpp
                 src/WindowInteraction/Button.cpp
                 src/WindowInteraction/Mouse.cpp
+                src/WindowInteraction/ButtonEvents.cpp
 ) 
 
 set_property(TARGET bitmap_graphic PROPERTY CXX_STANDARD 20)

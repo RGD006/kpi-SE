@@ -24,7 +24,7 @@ public:
     void eventMouseMove(void *);
     void addCanvas(Canvas *canvas);
     bool *getMoveState();
-    IObject *drawShape(SDL_Point);
+    IObject *getShape(SDL_Point);
     Canvas *getCanvas();
     ~Pen();
 };
