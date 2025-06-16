@@ -34,7 +34,7 @@ void Button::setTexture(SDL_Texture *texture)
 
 void Button::setTexture(const char *path)
 {
-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, s_rect.w, s_rect.h);
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, s_rect.w, s_rect.h);
     texture = IMG_LoadTexture(renderer, path);
 }
 
@@ -42,6 +42,9 @@ void Button::setTexture(const char *path)
 
 void Button::render()
 {
+    if (!texture)
+        throw "No texture";
+
     if (isEmptyRect(s_rect))
     {
         SDL_RenderCopy(renderer, texture, nullptr, &d_rect);
