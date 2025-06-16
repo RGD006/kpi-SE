@@ -43,6 +43,25 @@ Pen::Pen(color_t _color, IObject *_shape)
     }
 }
 
+Canvas *Pen::getCanvas()
+{
+    return canvas;
+}
+
+bool Pen::calculateScale(SDL_Rect scale, int &x, int &y)
+{
+    if (x < scale.x || x > scale.x + scale.w ||
+        y < scale.y || y > scale.y + scale.h)
+    {
+        return false;
+    }
+
+    x = (x - scale.x) * getCanvas()->getScale().w / scale.w;
+    y = (y - scale.y) * getCanvas()->getScale().h / scale.h;
+
+    return true;
+}
+
 void Pen::changePen(IObject *new_shape)
 {
     assert(new_shape);
@@ -76,8 +95,11 @@ void Pen::eventMouseDown(void *arg)
     int x, y;
     *start_move = true;
     SDL_GetMouseState(&x, &y);
-    canvas->addObject(drawShape(createPoint(x, y)));
-    // std::cout << "Mouse down event: " << x << " " << y << std::endl;
+    if (calculateScale(canvas->getScale(), x, y))
+    {
+        canvas->addObject(drawShape(createPoint(x, y)));
+        std::cout << "Mouse down event: " << x << " " << y << std::endl;
+    }
 }
 
 void Pen::eventMouseMove(void *arg)
@@ -87,8 +109,11 @@ void Pen::eventMouseMove(void *arg)
     if (*start_move)
     {
         SDL_GetMouseState(&x, &y);
-        canvas->addObject(drawShape(createPoint(x, y)));
-        // std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
+        if (calculateScale(canvas->getScale(), x, y))
+        {
+            canvas->addObject(drawShape(createPoint(x, y)));
+            std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
+        }
     }
 }
 
