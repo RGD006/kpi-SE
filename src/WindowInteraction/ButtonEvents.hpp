@@ -1,0 +1,7 @@
+#pragma once
+
+enum BUTTONEVENTS
+{
+   BUTTON_SAVE, 
+   BUTTON_CHANGE_COLOR,
+};

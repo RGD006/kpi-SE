@@ -1,8 +1,10 @@
 #include "Mouse.hpp"
+#include <iostream>
+#include <SDL2/SDL_events.h>
 
 using namespace std;
 
-#define CLICK_TIME_MS (100)
+#define SHORT_CLICK_TIMEOUT_MS (100)
 
 Mouse::Mouse()
 {
@@ -51,8 +53,9 @@ void *Mouse::mouseReleaseLeft()
     const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
     end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
     is_holding = false;
+    SDL_GetMouseState(&tip->x, &tip->y);
 
-    if (end_click_time_ms - start_click_time_ms <= CLICK_TIME_MS) 
+    if (end_click_time_ms - start_click_time_ms <= SHORT_CLICK_TIMEOUT_MS) 
     {
         is_short_click = true;
         return reinterpret_cast<void *>(tip);
@@ -67,4 +70,10 @@ void *Mouse::mouseReleaseLeft()
 void *Mouse::mouseReleaseRight()
 {
     return nullptr;
+}
+
+void *Mouse::mouseMove()
+{
+    SDL_GetMouseState(&tip->x, &tip->y);
+    return reinterpret_cast<void *>(tip);
 }

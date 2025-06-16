@@ -3,6 +3,7 @@
 
 EventHandler::EventHandler()
 {
+    mouse = Mouse();
 }
 
 event_function_t::event_function_t()
@@ -30,10 +31,15 @@ void EventHandler::addEvent(u32 new_event, std::function<void(void *)> function,
     events[new_event].push_back(event_function_t(function, arg));
 }
 
-void EventHandler::addButtonEvent(u32 new_event, u32 button, std::function<void(void *)> function, void *arg)
+void EventHandler::addIOEvent(u32 new_event, u32 button, std::function<void(void *)> function, void *arg)
 {
     // std::cout << "Add button event: " << new_event << std::endl;
-    button_events[new_event].push_back(event_function_t(function, arg, button));
+    io_events[new_event].push_back(event_function_t(function, arg, button));
+}
+
+void EventHandler::addButton(Button &button)
+{
+   buttons.push_back(button);
 }
 
 void EventHandler::run(void)
@@ -45,16 +51,16 @@ void EventHandler::run(void)
         {
             // std::cout << "Handled event: " << incoming_event.type << std::endl;
             auto evnt = events.at(incoming_event.type);
-            for (const auto action : evnt)
+            for (const auto &action : evnt)
             {
                 action.function(action.arg);
             }
         }
-        else if (button_events.contains(incoming_event.type))
+        else if (io_events.contains(incoming_event.type))
         {
             // std::cout << "Button handled event: " << incoming_event.type << std::endl;
-            auto evnt = button_events.at(incoming_event.type);
-            for (const auto action : evnt)
+            auto evnt = io_events.at(incoming_event.type);
+            for (const auto &action : evnt)
             {
                 if (action.button != SDL_NO_BUTTON && incoming_event.button.button == action.button)
                 {
@@ -69,9 +75,10 @@ void EventHandler::run(void)
         
         /* Mouse events listening*/
 
-        for (auto button : io_buttons) 
+        // listen if button selected
+        for (auto &button : buttons) 
         {
-            
+            button.listenMouse(mouse);
         }
     }
 }

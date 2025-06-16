@@ -2,6 +2,7 @@
 #include "SDL2/SDL_image.h"
 #include "Shapes.hpp"
 #include "Pen.hpp"
+#include "ButtonEvents.hpp"
 #include <iostream>
 
 void exitWindow(void *arg)
@@ -42,25 +43,25 @@ void Window::run(void)
     Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
     rect->setColor(color_t(0xFF0000FF));
 
-    event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
-
     Pen pen(rect);
     pen.addCanvas(&canvas);
-
+    
     auto pen_mouse_down_evnt = [&pen](void *arg)
     { pen.eventMouseDown(arg); };
     auto pen_mouse_move_evnt = [&pen](void *arg)
     { pen.eventMouseMove(arg); };
     auto pen_mouse_up_evnt = [&pen](void *arg)
     { pen.eventMouseUp(arg); };
-
-    Button button_save = Button(createRect(0, 0, 0, 0), createRect(0, 0, 100, 100), renderer, "images/cat.png");
-
+    
+    Button button_save = Button(BUTTON_SAVE, createRect(0, 0, 0, 0), createRect(0, 0, 100, 100), renderer, "images/cat.png");
+    
     buttons.push_back(button_save);
-
-    event_handler.addButtonEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
-    event_handler.addButtonEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
-    event_handler.addButtonEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());
+    
+    event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
+    event_handler.addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
+    event_handler.addIOEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
+    event_handler.addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());
+    event_handler.addButton(button_save);
 
     
     while (window_run)
