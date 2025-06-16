@@ -39,11 +39,14 @@ void Button::setTexture(const char *path)
 
 void Button::render()
 {
-    // if (isEmptyRect(d_rect))
-    // {
-    // std::cout << "empty dest" << std::endl;
-    SDL_RenderCopy(renderer, texture, nullptr, &d_rect);
-    // }
+    if (isEmptyRect(s_rect))
+    {
+        SDL_RenderCopy(renderer, texture, nullptr, &d_rect);
+    }
+    else
+    {
+        SDL_RenderCopy(renderer, texture, &s_rect, &d_rect);
+    }
 }
 
 Button::~Button()
