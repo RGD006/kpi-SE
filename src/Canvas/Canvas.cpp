@@ -32,6 +32,13 @@ Canvas::Canvas(SDL_Window *window, SDL_Point start_point, int _w, int _h)
 // set in one color background_texture
 void Canvas::setBackground(color_t color, SDL_Rect *rect)
 {
+    // resize background size for canvas size
+    if (rect->w != w || rect->h != h)
+    {
+        rect->w = w;
+        rect->h = h;
+    }
+
     SDL_SetRenderTarget(renderer, background_texture);
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     if (rect)

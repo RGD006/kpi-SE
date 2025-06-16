@@ -29,13 +29,13 @@ void Window::run(void)
     SDL_Rect canvas_background = {
         .x = 0,
         .y = 0,
-        .w = 800,
-        .h = 800,
+        .w = 0,
+        .h = 0,
     };
     color_t color_canvas_background(0xFFFFFFFF);
 
     canvas.setBackground(color_canvas_background, &canvas_background);
-    
+
     Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
     rect->setColor(color_t(0xFF0000FF));
 
@@ -60,5 +60,4 @@ void Window::run(void)
         event_handler.run();
         canvas.render();
     }
-
 }
