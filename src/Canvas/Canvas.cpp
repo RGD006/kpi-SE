@@ -5,7 +5,7 @@ Canvas::Canvas()
 {
 }
 
-Canvas::Canvas(SDL_Window *window, SDL_Point start_point, int _w, int _h)
+Canvas::Canvas(SDL_Renderer *window_renderer, SDL_Point start_point, int _w, int _h)
     : pos(start_point), w(_w), h(_h)
 {
     scale = (SDL_Rect){
@@ -15,7 +15,7 @@ Canvas::Canvas(SDL_Window *window, SDL_Point start_point, int _w, int _h)
         .h = h,
     }; // scale for correct drawing in canvas
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = window_renderer;
     if (!renderer)
     {
         std::cerr << "Error with init renderer: " << SDL_GetError() << std::endl;
@@ -60,7 +60,6 @@ void Canvas::render()
 {
     SDL_RenderCopy(renderer, background_texture, nullptr, &scale); // draw background_texture
     SDL_RenderCopy(renderer, canvas_texture, nullptr, &scale);     // draw canvas
-    SDL_RenderPresent(renderer);
 }
 
 SDL_Rect Canvas::getScale() { return scale; }

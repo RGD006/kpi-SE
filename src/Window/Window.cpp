@@ -1,4 +1,5 @@
 #include <Window.hpp>
+#include "SDL2/SDL_image.h"
 #include "Shapes.hpp"
 #include "Pen.hpp"
 #include <iostream>
@@ -6,15 +7,22 @@
 void exitWindow(void *arg)
 {
     *((bool *)arg) = false;
-    std::cout << "Exit event" << std::endl;
+    // std::cout << "Exit event" << std::endl;
 }
 
 Window::Window(const char *window_title, u32 w, u32 h)
     : width(w), height(h)
 {
+    if (IMG_Init(IMG_INIT_PNG) == 0)
+    {
+        std::cerr << "IMG init error " << IMG_GetError() << std::endl; 
+        exit(EXIT_FAILURE);
+    }
+        
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, 0);
-    canvas = Canvas(window, createPoint(0, 200), 800, 800);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    canvas = Canvas(renderer, createPoint(0, 200), 800, 800);
     if (!window)
     {
         std::cerr << "SDL_CreateWindow error:" << SDL_GetError() << "\n";
@@ -26,12 +34,7 @@ void Window::run(void)
 {
     bool window_run = true;
 
-    SDL_Rect canvas_background = {
-        .x = 0,
-        .y = 0,
-        .w = 0,
-        .h = 0,
-    };
+    SDL_Rect canvas_background = {0};
     color_t color_canvas_background(0xFFFFFFFF);
 
     canvas.setBackground(color_canvas_background, &canvas_background);
@@ -51,13 +54,27 @@ void Window::run(void)
     auto pen_mouse_up_evnt = [&pen](void *arg)
     { pen.eventMouseUp(arg); };
 
+    Button button_save = Button(createRect(0, 0, 0, 0), createRect(0, 0, 100, 100), renderer, "images/cat.png");
+
+    buttons.push_back(button_save);
+
     event_handler.addButtonEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
     event_handler.addButtonEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
     event_handler.addButtonEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());
 
+    
     while (window_run)
     {
+        SDL_SetRenderTarget(renderer, nullptr);
+        
         event_handler.run();
+
+        for (auto &button : buttons)
+        {
+            button.render();
+        }
+        
         canvas.render();
+        SDL_RenderPresent(renderer);
     }
 }

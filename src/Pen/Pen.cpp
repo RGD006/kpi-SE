@@ -98,7 +98,7 @@ void Pen::eventMouseDown(void *arg)
     if (calculateScale(canvas->getScale(), x, y))
     {
         canvas->addObject(drawShape(createPoint(x, y)));
-        std::cout << "Mouse down event: " << x << " " << y << std::endl;
+        // std::cout << "Mouse down event: " << x << " " << y << std::endl;
     }
 }
 
@@ -112,7 +112,7 @@ void Pen::eventMouseMove(void *arg)
         if (calculateScale(canvas->getScale(), x, y))
         {
             canvas->addObject(drawShape(createPoint(x, y)));
-            std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
+            // std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
         }
     }
 }

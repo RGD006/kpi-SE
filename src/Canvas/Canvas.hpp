@@ -15,7 +15,7 @@ private:
     int w, h;
 
 public:
-    Canvas(SDL_Window *, SDL_Point, int, int);
+    Canvas(SDL_Renderer *, SDL_Point, int, int);
     Canvas();
     void render();
     SDL_Rect getScale();

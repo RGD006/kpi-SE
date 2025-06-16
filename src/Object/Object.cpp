@@ -35,6 +35,28 @@ SDL_Point createPoint(i32 x, i32 y)
     return tmp;
 }
 
+SDL_Rect createRect(i32 x, i32 y, i32 w, i32 h)
+{
+    SDL_Rect rect;
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
+    return rect;
+}
+
+bool isEmptyRect(SDL_Rect rect)
+{
+    SDL_Rect empty_rect = {
+        .x = 0,
+        .y = 0,
+        .w = 0,
+        .h = 0,
+    };
+
+    return memcmp(&rect, &empty_rect, sizeof(SDL_Rect)) == 0;
+}
+
 void IObject::setColor(color_t _color) { color = _color; }
 color_t IObject::getColor(void) { return color; }
 u32 IObject::getW(void) { return w; }

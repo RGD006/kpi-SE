@@ -1,6 +1,10 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 #include <typeof.hpp>
+#include <vector>
+
+#include "Button.hpp"
 #include "EventHandler.hpp"
 #include "Canvas.hpp"
 
@@ -8,8 +12,10 @@ class Window
 {
 private:
     SDL_Window *window;
+    SDL_Renderer *renderer; 
     EventHandler event_handler;
     Canvas canvas;
+    std::vector<Button> buttons;
     int width, height;
 public:
     Window(const char *, u32, u32);

@@ -2,7 +2,11 @@
 #include <SDL2/SDL_events.h>
 #include <functional>
 #include <typeof.hpp>
+#include <vector>
 #include <map>
+
+#include "Mouse.hpp"
+#include "Button.hpp"
 
 #define SDL_NO_BUTTON (0)
 
@@ -19,9 +23,11 @@ struct event_function_t
 class EventHandler
 {
 private:
+    Mouse mouse;
     SDL_Event incoming_event;
-    std::map<u32, event_function_t> events;
-    std::map<u32, event_function_t> button_events;
+    std::map<u32, std::vector<event_function_t>> events;
+    std::map<u32, std::vector<event_function_t>> button_events;
+    std::vector<Button> io_buttons;
 public:
     EventHandler();
     void addEvent(u32, std::function<void(void*)>, void *);
