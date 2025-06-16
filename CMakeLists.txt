@@ -10,6 +10,7 @@ include_directories(src
                     src/Canvas
                     src/Pen                    
                     src/Shapes
+                    src/WindowInteraction
 )
 
 add_executable(bitmap_graphic 
@@ -21,6 +22,7 @@ add_executable(bitmap_graphic
                 src/EventHandler/EventHandler.cpp
                 src/Canvas/Canvas.cpp
                 src/Pen/Pen.cpp
+                src/WindowInteraction/Button.cpp
 ) 
 
 set_property(TARGET bitmap_graphic PROPERTY CXX_STANDARD 20)
