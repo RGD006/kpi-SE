@@ -3,15 +3,6 @@
 
 EventHandler::EventHandler()
 {
-    auto mouse_down_evnt = [this](void *arg)
-    { this->mouse.pressLeft(arg); };
-    auto mouse_move_evnt = [this](void *arg)
-    { this->mouse.move(arg); };
-    auto mouse_up_evnt = [this](void *arg)
-    { this->mouse.releaseLeft(arg); };
-
-    addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, mouse_down_evnt, nullptr);
-    addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, mouse_up_evnt, nullptr);
 }
 
 event_function_t::event_function_t()
@@ -55,6 +46,8 @@ void EventHandler::run(void)
     while (SDL_PollEvent(&incoming_event))
     {
         // std::cout << "Event type: " << incoming_event.type << std::endl;
+        mouse.pollEvents(&incoming_event);
+
         if (incoming_event.type == SDL_USEREVENT)
         {
             if (events.contains(incoming_event.user.code))

@@ -83,11 +83,10 @@ void Button::render()
 
 void Button::listenMouse(Mouse &mouse)
 {
-    SDL_Rect *mouse_release = reinterpret_cast<SDL_Rect *>(mouse.releaseLeft(nullptr));
-
-    if (mouse_release)
+    if (mouse.getState(MOUSE_CLICK))
     {
-        if (SDL_HasIntersection(&d_rect, mouse_release) == SDL_TRUE)
+        // std::cout << "Mouse pressed " << mouse.getTipPos()->x << " " << mouse.getTipPos()->y << std::endl;
+        if (SDL_HasIntersection(&d_rect, mouse.getTipPos()) == SDL_TRUE)
         {
             std::cout << "Button is selected!" << std::endl;
             SDL_PushEvent(&event);

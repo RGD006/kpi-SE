@@ -30,56 +30,71 @@ Mouse::~Mouse()
     delete tip;
 }
 
-SDL_Rect *Mouse::interaction()
+SDL_Rect *Mouse::getTipPos()
 {
     return tip;
 }
 
-void *Mouse::pressLeft(void *)
+u32 Mouse::getState(MOUSESTATE state)
+{
+    return mouse_state[state];
+}
+
+void Mouse::setState(MOUSESTATE state, u32 value)
+{
+    mouse_state[state] = value;
+}
+
+void Mouse::setClickStartTime(void)
 {
     const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
     start_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
-    is_holding = true;
-
-    return nullptr;
 }
 
-void *Mouse::pressRight(void *)
+void Mouse::setClickEndTime(void)
 {
-    return nullptr;
+    const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
+    end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
 }
 
-void *Mouse::releaseLeft(void *)
+void Mouse::pollEvents(SDL_Event *event)
 {
-    if (is_holding)
+    switch (event->type)
     {
-        is_holding = false;
-        const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
-        end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
-        SDL_GetMouseState(&tip->x, &tip->y);
-
-        if (end_click_time_ms - start_click_time_ms <= SHORT_CLICK_TIMEOUT_MS)
+    case SDL_MOUSEBUTTONDOWN:
+        if (event->button.button == SDL_BUTTON_LEFT)
         {
-            is_short_click = true;
-            return reinterpret_cast<void *>(tip);
+            setClickStartTime();
+            mouse_state[MOUSE_HOLDING] = 1;
+            SDL_GetMouseState(&tip->x, &tip->y);
         }
-        else
+        else if (event->button.button == SDL_BUTTON_RIGHT)
         {
-            is_long_click = true;
-            return reinterpret_cast<void *>(tip);
+            setClickStartTime();
+            mouse_state[MOUSE_HOLDING] = 1;
+            SDL_GetMouseState(&tip->x, &tip->y);
         }
+        break;
+    case SDL_MOUSEBUTTONUP:
+        if (event->button.button == SDL_BUTTON_LEFT)
+        {
+            setClickEndTime();
+            mouse_state[MOUSE_HOLDING] = 0;
+            mouse_state[MOUSE_CLICK] = 1;
+            SDL_GetMouseState(&tip->x, &tip->y);
+        }
+        else if (event->button.button == SDL_BUTTON_RIGHT)
+        {
+            setClickEndTime();
+            mouse_state[MOUSE_HOLDING] = 1;
+            mouse_state[MOUSE_CLICK] = 1;
+            SDL_GetMouseState(&tip->x, &tip->y);
+        }
+        break;
+    case SDL_MOUSEMOTION:
+        // do smth
+        break;
+    default:
+        break;
     }
-    
-    return nullptr;
-}
-
-void *Mouse::releaseRight(void *)
-{
-    return nullptr;
-}
-
-void *Mouse::move(void *)
-{
-    SDL_GetMouseState(&tip->x, &tip->y);
-    return reinterpret_cast<void *>(tip);
 }
