@@ -66,6 +66,11 @@ void Window::run(void)
     { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
     auto pen_decrease_size = [&pen](void *arg)
     { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
+    auto pen_set_eraser = [&pen, &rect](void *arg)
+    {
+        pen.changeShape(rect);
+        pen.changeColor(color_eraser);
+    };
     auto pen_change_shape_rect = [&pen, &rect](void *arg)
     { 
         color_t prev_color = pen.getShape(createPoint(0, 0))->getColor();
@@ -139,7 +144,7 @@ void Window::run(void)
     event_handler.addEvent(BUTTON_CHANGE_COLOR_WHITE, pen_change_color, reinterpret_cast<void *>(&color_white));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_GREY, pen_change_color, reinterpret_cast<void *>(&color_grey));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_BLACK, pen_change_color, reinterpret_cast<void *>(&color_black));
-    event_handler.addEvent(BUTTON_CHANGE_COLOR_ERASER, pen_change_color, reinterpret_cast<void *>(&color_eraser));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_ERASER, pen_set_eraser, reinterpret_cast<void *>(&color_eraser));
     event_handler.addEvent(BUTTON_CHANGE_SHAPE_RECT, pen_change_shape_rect, &rect);
     event_handler.addEvent(BUTTON_CHANGE_SHAPE_CIRC, pen_change_shape_circ, &circ);
     event_handler.addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());

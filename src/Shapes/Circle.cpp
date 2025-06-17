@@ -39,3 +39,23 @@ void Circle::drawObject(SDL_Renderer *renderer)
         }
     }
 }
+
+u32 Circle::getW(void)
+{
+    return radius;
+}
+
+u32 Circle::getH(void)
+{
+    return radius;
+}
+
+void Circle::setW(u32 value)
+{
+    radius = value;
+}
+
+void Circle::setH(u32 value)
+{
+    radius = value;
+}
