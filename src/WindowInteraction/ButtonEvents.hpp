@@ -19,6 +19,8 @@ enum BUTTONEVENTS
    BUTTON_CHANGE_COLOR_ERASER,
    BUTTON_INCREASE_PEN_SIZE,
    BUTTON_DECREASE_PEN_SIZE,
+   BUTTON_CHANGE_SHAPE_RECT,
+   BUTTON_CHANGE_SHAPE_CIRC,
    BUTTON_BUF_SIZE,
 };
 
@@ -46,3 +48,5 @@ extern SDL_Rect color_button_dest_black;
 extern SDL_Rect color_button_dest_eraser;
 extern SDL_Rect rect_increase_pen_size;
 extern SDL_Rect rect_decrease_pen_size;
+extern SDL_Rect rect_change_pen_rect;
+extern SDL_Rect rect_change_pen_circ;

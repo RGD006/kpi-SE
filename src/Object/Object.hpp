@@ -8,6 +8,10 @@ struct color_t
     color_t(u8, u8, u8, u8);
     color_t(u32);
     color_t();
+    operator u32() const
+    {
+        return (r << 24) | (g << 16) | (b << 8) | a;
+    }
 };
 
 class IObject

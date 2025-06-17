@@ -47,9 +47,11 @@ void Window::run(void)
     canvas.setBackground(color_canvas_background, &canvas_background);
 
     Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
-    rect->setColor(color_t(0xFF0000FF));
-
-    Pen pen(rect);
+    Circle *circ = new Circle(10, createPoint(0, 0), true);
+    
+    Pen pen;
+    pen.changeShape(rect);
+    pen.changeColor(0x000000FF);
     pen.addCanvas(&canvas);
 
     auto pen_mouse_down_evnt = [&pen](void *arg)
@@ -59,11 +61,23 @@ void Window::run(void)
     auto pen_mouse_up_evnt = [&pen](void *arg)
     { pen.eventMouseUp(arg); };
     auto pen_change_color = [&pen](void *arg)
-    {  pen.changeColor(*reinterpret_cast<u32 *>(arg)); };
+    { pen.changeColor(*reinterpret_cast<u32 *>(arg)); };
     auto pen_increase_size = [&pen](void *arg)
     { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
     auto pen_decrease_size = [&pen](void *arg)
     { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
+    auto pen_change_shape_rect = [&pen, &rect](void *arg)
+    { 
+        color_t prev_color = pen.getShape(createPoint(0, 0))->getColor();
+        pen.changeShape(rect); 
+        pen.changeColor(prev_color);
+    };
+    auto pen_change_shape_circ = [&pen, &circ](void *arg)
+    { 
+        color_t prev_color = pen.getShape(createPoint(0, 0))->getColor();
+        pen.changeShape(circ); 
+        pen.changeColor(prev_color);
+    };
 
     u32 change_pen_size = 3;
 
@@ -79,6 +93,8 @@ void Window::run(void)
     Button button_eraser(BUTTON_CHANGE_COLOR_ERASER, createRect(0, 0, 0, 0), color_button_dest_eraser, renderer, "images/eraser.png");
     Button button_increase_pen_size(BUTTON_INCREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_increase_pen_size, renderer, "images/plus.png");
     Button button_decrease_pen_size(BUTTON_DECREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_decrease_pen_size, renderer, "images/minus.png");
+    Button button_change_shape_rect(BUTTON_CHANGE_SHAPE_RECT, createRect(0, 0, 0, 0), rect_change_pen_rect, renderer, "images/draw_rect.png");
+    Button button_change_shape_circ(BUTTON_CHANGE_SHAPE_CIRC, createRect(0, 0, 0, 0), rect_change_pen_circ, renderer, "images/draw_circle.png");
 
     buttons.push_back(&button_red);
     buttons.push_back(&button_yellow);
@@ -92,6 +108,8 @@ void Window::run(void)
     buttons.push_back(&button_eraser);
     buttons.push_back(&button_increase_pen_size);
     buttons.push_back(&button_decrease_pen_size);
+    buttons.push_back(&button_change_shape_rect);
+    buttons.push_back(&button_change_shape_circ);
 
     event_handler.addButton(&button_red);
     event_handler.addButton(&button_yellow);
@@ -105,6 +123,8 @@ void Window::run(void)
     event_handler.addButton(&button_eraser);
     event_handler.addButton(&button_increase_pen_size);
     event_handler.addButton(&button_decrease_pen_size);
+    event_handler.addButton(&button_change_shape_rect);
+    event_handler.addButton(&button_change_shape_circ);
 
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
@@ -120,6 +140,8 @@ void Window::run(void)
     event_handler.addEvent(BUTTON_CHANGE_COLOR_GREY, pen_change_color, reinterpret_cast<void *>(&color_grey));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_BLACK, pen_change_color, reinterpret_cast<void *>(&color_black));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_ERASER, pen_change_color, reinterpret_cast<void *>(&color_eraser));
+    event_handler.addEvent(BUTTON_CHANGE_SHAPE_RECT, pen_change_shape_rect, &rect);
+    event_handler.addEvent(BUTTON_CHANGE_SHAPE_CIRC, pen_change_shape_circ, &circ);
     event_handler.addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
     event_handler.addIOEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
     event_handler.addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());

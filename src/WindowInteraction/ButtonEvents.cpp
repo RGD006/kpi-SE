@@ -95,3 +95,17 @@ SDL_Rect rect_decrease_pen_size = {
     .w = 50,
     .h = 50,
 };
+
+SDL_Rect rect_change_pen_rect = {
+    .x = 150,
+    .y = 50,
+    .w = 50,
+    .h = 50, 
+};
+
+SDL_Rect rect_change_pen_circ = {
+    .x = 200,
+    .y = 50,
+    .w = 50,
+    .h = 50,
+};
