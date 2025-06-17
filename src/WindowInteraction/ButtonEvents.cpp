@@ -10,6 +10,7 @@ u32 color_purple = 0x990099FF;
 u32 color_white = 0xFFFFFFFF;
 u32 color_grey = 0x606060FF;
 u32 color_black = 0x000000FF;
+u32 color_eraser = 0x0;
 
 SDL_Rect color_button_dest_red = {
     .x = 0,
@@ -70,6 +71,13 @@ SDL_Rect color_button_dest_grey = {
 SDL_Rect color_button_dest_black = {
     .x = 400,
     .y = 0,
+    .w = 50,
+    .h = 50,
+};
+
+SDL_Rect color_button_dest_eraser = {
+    .x = 100,
+    .y = 50,
     .w = 50,
     .h = 50,
 };

@@ -76,6 +76,7 @@ void Window::run(void)
     Button button_white(BUTTON_CHANGE_COLOR_WHITE, createRect(0, 0, 0, 0), color_button_dest_white, renderer, color_white);
     Button button_grey(BUTTON_CHANGE_COLOR_GREY, createRect(0, 0, 0, 0), color_button_dest_grey, renderer, color_grey);
     Button button_black(BUTTON_CHANGE_COLOR_BLACK, createRect(0, 0, 0, 0), color_button_dest_black, renderer, color_black);
+    Button button_eraser(BUTTON_CHANGE_COLOR_ERASER, createRect(0, 0, 0, 0), color_button_dest_eraser, renderer, "images/eraser.png");
     Button button_increase_pen_size(BUTTON_INCREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_increase_pen_size, renderer, "images/plus.png");
     Button button_decrease_pen_size(BUTTON_DECREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_decrease_pen_size, renderer, "images/minus.png");
 
@@ -88,6 +89,7 @@ void Window::run(void)
     buttons.push_back(&button_white);
     buttons.push_back(&button_grey);
     buttons.push_back(&button_black);
+    buttons.push_back(&button_eraser);
     buttons.push_back(&button_increase_pen_size);
     buttons.push_back(&button_decrease_pen_size);
 
@@ -100,6 +102,7 @@ void Window::run(void)
     event_handler.addButton(&button_white);
     event_handler.addButton(&button_grey);
     event_handler.addButton(&button_black);
+    event_handler.addButton(&button_eraser);
     event_handler.addButton(&button_increase_pen_size);
     event_handler.addButton(&button_decrease_pen_size);
 
@@ -116,6 +119,7 @@ void Window::run(void)
     event_handler.addEvent(BUTTON_CHANGE_COLOR_WHITE, pen_change_color, reinterpret_cast<void *>(&color_white));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_GREY, pen_change_color, reinterpret_cast<void *>(&color_grey));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_BLACK, pen_change_color, reinterpret_cast<void *>(&color_black));
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_ERASER, pen_change_color, reinterpret_cast<void *>(&color_eraser));
     event_handler.addIOEvent(SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT, pen_mouse_down_evnt, pen.getMoveState());
     event_handler.addIOEvent(SDL_MOUSEMOTION, SDL_NO_BUTTON, pen_mouse_move_evnt, pen.getMoveState());
     event_handler.addIOEvent(SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT, pen_mouse_up_evnt, pen.getMoveState());

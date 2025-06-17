@@ -16,6 +16,7 @@ enum BUTTONEVENTS
    BUTTON_CHANGE_COLOR_WHITE,
    BUTTON_CHANGE_COLOR_GREY,
    BUTTON_CHANGE_COLOR_BLACK,
+   BUTTON_CHANGE_COLOR_ERASER,
    BUTTON_INCREASE_PEN_SIZE,
    BUTTON_DECREASE_PEN_SIZE,
    BUTTON_BUF_SIZE,
@@ -31,6 +32,7 @@ extern u32 color_purple;
 extern u32 color_white;
 extern u32 color_grey;
 extern u32 color_black;
+extern u32 color_eraser;
 
 extern SDL_Rect color_button_dest_red;
 extern SDL_Rect color_button_dest_yellow;
@@ -41,5 +43,6 @@ extern SDL_Rect color_button_dest_purple;
 extern SDL_Rect color_button_dest_white;
 extern SDL_Rect color_button_dest_grey;
 extern SDL_Rect color_button_dest_black;
+extern SDL_Rect color_button_dest_eraser;
 extern SDL_Rect rect_increase_pen_size;
 extern SDL_Rect rect_decrease_pen_size;
