@@ -27,13 +27,10 @@ event_function_t::event_function_t(std::function<void(void *)> function, void *a
 void EventHandler::addEvent(u32 new_event, std::function<void(void *)> function, void *arg)
 {
     // std::cout << "Add event: " << new_event << std::endl;
-    events[new_event].push_back(event_function_t(function, arg));
-}
-
-void EventHandler::addIOEvent(u32 new_event, u32 button, std::function<void(void *)> function, void *arg)
-{
-    // std::cout << "Add button event: " << new_event << std::endl;
-    io_events[new_event].push_back(event_function_t(function, arg, button));
+    if (new_event == LISTEN_ALWAYS)
+        listen_always_functions.push_back(event_function_t(function, arg));
+    else
+        events[new_event].push_back(event_function_t(function, arg));
 }
 
 void EventHandler::addButton(Button *button)
@@ -68,21 +65,10 @@ void EventHandler::run(void)
                 action.function(action.arg);
             }
         }
-        else if (io_events.contains(incoming_event.type))
+
+        for (auto &action : listen_always_functions)
         {
-            // std::cout << "Button handled event: " << incoming_event.type << std::endl;
-            auto evnt = io_events.at(incoming_event.type);
-            for (const auto &action : evnt)
-            {
-                if (action.button != SDL_NO_BUTTON && incoming_event.button.button == action.button)
-                {
-                    action.function(action.arg);
-                }
-                else if (action.button == SDL_NO_BUTTON)
-                {
-                    action.function(action.arg);
-                }
-            }
+            action.function(action.arg);
         }
 
         /* Mouse events listening*/
@@ -100,4 +86,9 @@ void EventHandler::run(void)
 SDL_Event EventHandler::getEvent()
 {
     return incoming_event;
+}
+
+Mouse *EventHandler::getMouse(void)
+{
+    return &mouse;
 }

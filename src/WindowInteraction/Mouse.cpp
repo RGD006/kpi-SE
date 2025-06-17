@@ -35,14 +35,14 @@ SDL_Rect *Mouse::getTipPos()
     return tip;
 }
 
-u32 Mouse::getState(MOUSESTATE state)
+u32 Mouse::getState(MOUSESTATE state_index)
 {
-    return mouse_state[state];
+    return state[state_index];
 }
 
-void Mouse::setState(MOUSESTATE state, u32 value)
+void Mouse::setState(MOUSESTATE state_index, u32 value)
 {
-    mouse_state[state] = value;
+    state[state_index] = value;
 }
 
 void Mouse::setClickStartTime(void)
@@ -55,6 +55,11 @@ void Mouse::setClickEndTime(void)
 {
     const auto sys_time_epoch = chrono::system_clock::now().time_since_epoch();
     end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
+}
+
+std::bitset<MOUSE_STATE_SIZE> Mouse::getAllStates()
+{
+    return state;
 }
 
 void Mouse::endCallback(void)

@@ -1,6 +1,7 @@
 #include "Pen.hpp"
 #include "SDL2/SDL_events.h"
 #include <cassert>
+#include <bitset>
 #include <iostream>
 
 Pen::Pen()
@@ -89,44 +90,6 @@ void Pen::addCanvas(Canvas *canvas)
     this->canvas = canvas;
 }
 
-void Pen::eventMouseDown(void *arg)
-{
-    bool *start_move = reinterpret_cast<bool *>(arg);
-    int x, y;
-    *start_move = true;
-    SDL_GetMouseState(&x, &y);
-    if (calculateScale(canvas->getScale(), x, y))
-    {
-        canvas->addObject(getShape(createPoint(x, y)));
-        // std::cout << "Mouse down event: " << x << " " << y << std::endl;
-    }
-}
-
-void Pen::eventMouseMove(void *arg)
-{
-    bool *start_move = reinterpret_cast<bool *>(arg);
-    int x, y;
-    if (*start_move)
-    {
-        SDL_GetMouseState(&x, &y);
-        if (calculateScale(canvas->getScale(), x, y))
-        {
-            canvas->addObject(getShape(createPoint(x, y)));
-            // std::cout << "Mouse continue draw event: " << x << " " << y << std::endl;
-        }
-    }
-}
-
-void Pen::eventMouseUp(void *arg)
-{
-    bool *start_move = reinterpret_cast<bool *>(arg);
-    if (*start_move)
-    {
-        *start_move = false;
-        // std::cout << "Stop draw event" << std::endl;
-    }
-}
-
 bool *Pen::getMoveState() { return &start_move; }
 
 void Pen::increaseSize(u32 value)
@@ -153,4 +116,39 @@ void Pen::decreaseSize(i32 value)
 void Pen::changeColor(u32 color)
 {
     getShape(createPoint(0, 0))->setColor(color);
+}
+
+void Pen::pinMouse(Mouse *mouse)
+{
+    this->mouse = mouse;
+}
+
+void Pen::listenEvents(void *arg)
+{
+    if (!mouse)
+        throw "No pinned mouse";
+
+    const std::bitset<MOUSE_STATE_SIZE> mouse_states = mouse->getAllStates();
+    SDL_Rect mouse_tip = *mouse->getTipPos();
+
+    if (!calculateScale(canvas->getScale(), mouse_tip.x, mouse_tip.y))
+    {
+        return;
+    }
+
+    if (mouse_states[MOUSE_HOLDING])
+    {
+        start_move = true;        
+        canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+    }
+    else 
+    {
+        start_move = false;
+    }
+
+    if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
+    {
+        canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+    }
+    
 }
