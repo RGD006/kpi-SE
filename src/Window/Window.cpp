@@ -65,7 +65,7 @@ void Window::run(void)
     auto pen_decrease_size = [&pen](void *arg)
     { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
 
-    u32 change_pen_size = 20;
+    u32 change_pen_size = 3;
 
     Button button_red(BUTTON_CHANGE_COLOR_RED, createRect(0, 0, 0, 0), color_button_dest_red, renderer, color_red);
     Button button_yellow(BUTTON_CHANGE_COLOR_YELLOW, createRect(0, 0, 0, 0), color_button_dest_yellow, renderer, color_yellow);

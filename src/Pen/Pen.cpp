@@ -135,18 +135,18 @@ void Pen::increaseSize(u32 value)
     u32 old_w = shape->getW(), old_h = shape->getH();
     shape->setW(old_w + value);
     shape->setH(old_h + value);
-    std::cout << "increase" << std::endl;
+    std::cout << "increase " << shape->getW() << " " << shape->getH() << std::endl;
 }
 
-void Pen::decreaseSize(u32 value)
+void Pen::decreaseSize(i32 value)
 {
     IObject *shape = getShape(createPoint(0, 0));
-    u32 old_w = shape->getW(), old_h = shape->getH();
+    i32 old_w = shape->getW(), old_h = shape->getH();
     if (old_w - value > 0 && old_h - value > 0)
     {
         shape->setW(old_w - value);
         shape->setH(old_h - value);
-        std::cout << "decrease" << std::endl;
+        std::cout << "decrease " << shape->getW() << " " << shape->getH() << std::endl;
     }
 }
 
@@ -154,4 +154,3 @@ void Pen::changeColor(u32 color)
 {
     getShape(createPoint(0, 0))->setColor(color);
 }
-    
