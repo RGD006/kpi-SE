@@ -63,6 +63,8 @@ void Mouse::endCallback(void)
     {
         setState(MOUSE_CLICK, 0);
     }
+
+    setState(MOUSE_MOVING, 0);
 }
 
 void Mouse::pollEvents(SDL_Event *event)
@@ -73,13 +75,13 @@ void Mouse::pollEvents(SDL_Event *event)
         if (event->button.button == SDL_BUTTON_LEFT)
         {
             setClickStartTime();
-            mouse_state[MOUSE_HOLDING] = 1;
+            setState(MOUSE_HOLDING, 1);
             SDL_GetMouseState(&tip->x, &tip->y);
         }
         else if (event->button.button == SDL_BUTTON_RIGHT)
         {
             setClickStartTime();
-            mouse_state[MOUSE_HOLDING] = 1;
+            setState(MOUSE_HOLDING, 1);
             SDL_GetMouseState(&tip->x, &tip->y);
         }
         break;
@@ -87,20 +89,21 @@ void Mouse::pollEvents(SDL_Event *event)
         if (event->button.button == SDL_BUTTON_LEFT)
         {
             setClickEndTime();
-            mouse_state[MOUSE_HOLDING] = 0;
-            mouse_state[MOUSE_CLICK] = 1;
+            setState(MOUSE_HOLDING, 0);
+            setState(MOUSE_CLICK, 1);
             SDL_GetMouseState(&tip->x, &tip->y);
         }
         else if (event->button.button == SDL_BUTTON_RIGHT)
         {
             setClickEndTime();
-            mouse_state[MOUSE_HOLDING] = 1;
-            mouse_state[MOUSE_CLICK] = 1;
+            setState(MOUSE_HOLDING, 0);
+            setState(MOUSE_CLICK, 1);
             SDL_GetMouseState(&tip->x, &tip->y);
         }
         break;
     case SDL_MOUSEMOTION:
-        // do smth
+        setState(MOUSE_MOVING, 1);
+        SDL_GetMouseState(&tip->x, &tip->y);
         break;
     default:
         break;
