@@ -26,9 +26,7 @@ public:
     void decreaseSize(i32);
     void changeColor(u32);
     void deletePen();
-    void eventMouseDown(void *);
-    void eventMouseUp(void *);
-    void eventMouseMove(void *);
+    bool nowEraser(void);
     void addCanvas(Canvas *canvas);
     bool *getMoveState();
     IObject *getShape(SDL_Point);

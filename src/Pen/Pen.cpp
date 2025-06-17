@@ -98,7 +98,6 @@ void Pen::increaseSize(u32 value)
     u32 old_w = shape->getW(), old_h = shape->getH();
     shape->setW(old_w + value);
     shape->setH(old_h + value);
-    std::cout << "increase " << shape->getW() << " " << shape->getH() << std::endl;
 }
 
 void Pen::decreaseSize(i32 value)
@@ -109,7 +108,6 @@ void Pen::decreaseSize(i32 value)
     {
         shape->setW(old_w - value);
         shape->setH(old_h - value);
-        std::cout << "decrease " << shape->getW() << " " << shape->getH() << std::endl;
     }
 }
 
@@ -121,6 +119,11 @@ void Pen::changeColor(u32 color)
 void Pen::pinMouse(Mouse *mouse)
 {
     this->mouse = mouse;
+}
+
+bool Pen::nowEraser(void)
+{
+    return getShape(createPoint(0, 0))->getColor().a == 0x00;
 }
 
 void Pen::listenEvents(void *arg)
@@ -138,10 +141,10 @@ void Pen::listenEvents(void *arg)
 
     if (mouse_states[MOUSE_HOLDING])
     {
-        start_move = true;        
+        start_move = true;
         canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
     }
-    else 
+    else
     {
         start_move = false;
     }
@@ -150,5 +153,4 @@ void Pen::listenEvents(void *arg)
     {
         canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
     }
-    
 }

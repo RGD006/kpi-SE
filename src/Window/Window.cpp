@@ -48,7 +48,7 @@ void Window::run(void)
 
     Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
     Circle *circ = new Circle(10, createPoint(0, 0), true);
-    
+
     Pen pen;
     pen.changeShape(rect);
     pen.changeColor(0x000000FF);
@@ -58,7 +58,13 @@ void Window::run(void)
     auto pen_listen_mouse = [&pen](void *arg)
     { pen.listenEvents(arg); };
     auto pen_change_color = [&pen](void *arg)
-    { pen.changeColor(*reinterpret_cast<u32 *>(arg)); };
+    {
+        if (pen.nowEraser())
+        {
+            return;
+        }
+        pen.changeColor(*reinterpret_cast<u32 *>(arg));
+    };
     auto pen_increase_size = [&pen](void *arg)
     { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
     auto pen_decrease_size = [&pen](void *arg)
@@ -69,15 +75,30 @@ void Window::run(void)
         pen.changeColor(color_eraser);
     };
     auto pen_change_shape_rect = [&pen, &rect](void *arg)
-    { 
-        color_t prev_color = pen.getShape(createPoint(0, 0))->getColor();
-        pen.changeShape(rect); 
+    {
+        color_t prev_color;
+        if (pen.nowEraser())
+        {
+            prev_color = color_t(0x000000FF);
+        }
+        else
+        {
+            prev_color = pen.getShape(createPoint(0, 0))->getColor();
+        }
+        pen.changeShape(rect);
         pen.changeColor(prev_color);
     };
     auto pen_change_shape_circ = [&pen, &circ](void *arg)
-    { 
-        color_t prev_color = pen.getShape(createPoint(0, 0))->getColor();
-        pen.changeShape(circ); 
+    {color_t prev_color;
+        if (pen.nowEraser())
+        {
+            prev_color = color_t(0x000000FF);
+        }
+        else
+        {
+            prev_color = pen.getShape(createPoint(0, 0))->getColor();
+        }
+        pen.changeShape(circ);
         pen.changeColor(prev_color);
     };
 
