@@ -1,4 +1,5 @@
 #include "ButtonEvents.hpp"
+#include <iostream>
 
 u32 color_red = 0xFF0000FF;
 u32 color_yellow = 0xFFFF00FF;
@@ -73,7 +74,16 @@ SDL_Rect color_button_dest_black = {
     .h = 50,
 };
 
-void changePenColor(Pen *pen, u32 color)
-{
-    pen->getShape(createPoint(0, 0))->setColor(color);
-}
+SDL_Rect rect_increase_pen_size = {
+    .x = 0,
+    .y = 50,
+    .w = 50,
+    .h = 50,
+};
+
+SDL_Rect rect_decrease_pen_size = {
+    .x = 50,
+    .y = 50,
+    .w = 50,
+    .h = 50,
+};

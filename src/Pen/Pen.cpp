@@ -62,7 +62,7 @@ bool Pen::calculateScale(SDL_Rect scale, int &x, int &y)
     return true;
 }
 
-void Pen::changePen(IObject *new_shape)
+void Pen::changeShape(IObject *new_shape)
 {
     assert(new_shape);
     shape = new_shape;
@@ -128,3 +128,30 @@ void Pen::eventMouseUp(void *arg)
 }
 
 bool *Pen::getMoveState() { return &start_move; }
+
+void Pen::increaseSize(u32 value)
+{
+    IObject *shape = getShape(createPoint(0, 0));
+    u32 old_w = shape->getW(), old_h = shape->getH();
+    shape->setW(old_w + value);
+    shape->setH(old_h + value);
+    std::cout << "increase" << std::endl;
+}
+
+void Pen::decreaseSize(u32 value)
+{
+    IObject *shape = getShape(createPoint(0, 0));
+    u32 old_w = shape->getW(), old_h = shape->getH();
+    if (old_w - value > 0 && old_h - value > 0)
+    {
+        shape->setW(old_w - value);
+        shape->setH(old_h - value);
+        std::cout << "decrease" << std::endl;
+    }
+}
+
+void Pen::changeColor(u32 color)
+{
+    getShape(createPoint(0, 0))->setColor(color);
+}
+    

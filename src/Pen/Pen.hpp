@@ -17,7 +17,10 @@ public:
     Pen(color_t);
     Pen(IObject *);
     Pen(color_t, IObject *);
-    void changePen(IObject *);
+    void changeShape(IObject *);
+    void increaseSize(u32);
+    void decreaseSize(u32);
+    void changeColor(u32);
     void deletePen();
     void eventMouseDown(void *);
     void eventMouseUp(void *);

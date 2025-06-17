@@ -25,6 +25,8 @@ public:
     virtual color_t getColor(void);
     virtual u32 getW(void);
     virtual u32 getH(void);
+    virtual void setW(u32);
+    virtual void setH(u32);
     virtual SDL_Point getCenterPoints(void);
     virtual void drawObject(SDL_Renderer *);
     virtual void setCenterPoints(SDL_Point);

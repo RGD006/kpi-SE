@@ -59,7 +59,13 @@ void Window::run(void)
     auto pen_mouse_up_evnt = [&pen](void *arg)
     { pen.eventMouseUp(arg); };
     auto pen_change_color = [&pen](void *arg)
-    { changePenColor(&pen, *reinterpret_cast<u32 *>(arg)); };
+    {  pen.changeColor(*reinterpret_cast<u32 *>(arg)); };
+    auto pen_increase_size = [&pen](void *arg)
+    { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
+    auto pen_decrease_size = [&pen](void *arg)
+    { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
+
+    u32 change_pen_size = 20;
 
     Button button_red(BUTTON_CHANGE_COLOR_RED, createRect(0, 0, 0, 0), color_button_dest_red, renderer, color_red);
     Button button_yellow(BUTTON_CHANGE_COLOR_YELLOW, createRect(0, 0, 0, 0), color_button_dest_yellow, renderer, color_yellow);
@@ -70,6 +76,8 @@ void Window::run(void)
     Button button_white(BUTTON_CHANGE_COLOR_WHITE, createRect(0, 0, 0, 0), color_button_dest_white, renderer, color_white);
     Button button_grey(BUTTON_CHANGE_COLOR_GREY, createRect(0, 0, 0, 0), color_button_dest_grey, renderer, color_grey);
     Button button_black(BUTTON_CHANGE_COLOR_BLACK, createRect(0, 0, 0, 0), color_button_dest_black, renderer, color_black);
+    Button button_increase_pen_size(BUTTON_INCREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_increase_pen_size, renderer, "images/plus.png");
+    Button button_decrease_pen_size(BUTTON_DECREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_decrease_pen_size, renderer, "images/minus.png");
 
     buttons.push_back(&button_red);
     buttons.push_back(&button_yellow);
@@ -80,6 +88,8 @@ void Window::run(void)
     buttons.push_back(&button_white);
     buttons.push_back(&button_grey);
     buttons.push_back(&button_black);
+    buttons.push_back(&button_increase_pen_size);
+    buttons.push_back(&button_decrease_pen_size);
 
     event_handler.addButton(&button_red);
     event_handler.addButton(&button_yellow);
@@ -90,9 +100,13 @@ void Window::run(void)
     event_handler.addButton(&button_white);
     event_handler.addButton(&button_grey);
     event_handler.addButton(&button_black);
+    event_handler.addButton(&button_increase_pen_size);
+    event_handler.addButton(&button_decrease_pen_size);
 
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
+    event_handler.addEvent(BUTTON_INCREASE_PEN_SIZE, pen_increase_size, reinterpret_cast<void *>(&change_pen_size));
+    event_handler.addEvent(BUTTON_DECREASE_PEN_SIZE, pen_decrease_size, reinterpret_cast<void *>(&change_pen_size));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_RED, pen_change_color, reinterpret_cast<void *>(&color_red));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_YELLOW, pen_change_color, reinterpret_cast<void *>(&color_yellow));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_BLUE, pen_change_color, reinterpret_cast<void *>(&color_blue));

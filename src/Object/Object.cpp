@@ -57,6 +57,16 @@ bool isEmptyRect(SDL_Rect rect)
     return memcmp(&rect, &empty_rect, sizeof(SDL_Rect)) == 0;
 }
 
+void IObject::setW(u32 width)
+{
+    w = width;
+}
+
+void IObject::setH(u32 height)
+{
+    h = height;
+}
+
 void IObject::setColor(color_t _color) { color = _color; }
 color_t IObject::getColor(void) { return color; }
 u32 IObject::getW(void) { return w; }
