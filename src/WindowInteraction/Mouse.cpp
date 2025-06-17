@@ -57,6 +57,14 @@ void Mouse::setClickEndTime(void)
     end_click_time_ms = chrono::duration_cast<chrono::milliseconds>(sys_time_epoch).count();
 }
 
+void Mouse::endCallback(void)
+{
+    if (getState(MOUSE_CLICK))
+    {
+        setState(MOUSE_CLICK, 0);
+    }
+}
+
 void Mouse::pollEvents(SDL_Event *event)
 {
     switch (event->type)

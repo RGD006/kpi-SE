@@ -93,6 +93,8 @@ void EventHandler::run(void)
             button->listenMouse(mouse);
         }
     }
+
+    mouse.endCallback();
 }
 
 SDL_Event EventHandler::getEvent()

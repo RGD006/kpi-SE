@@ -27,6 +27,7 @@ public:
     u32 getState(MOUSESTATE state);
     void setState(MOUSESTATE state, u32 value);
     void pollEvents(SDL_Event *event);
+    void endCallback(void);
     void setClickStartTime(void);
     void setClickEndTime(void);
     Mouse();

@@ -88,7 +88,7 @@ void Button::listenMouse(Mouse &mouse)
         // std::cout << "Mouse pressed " << mouse.getTipPos()->x << " " << mouse.getTipPos()->y << std::endl;
         if (SDL_HasIntersection(&d_rect, mouse.getTipPos()) == SDL_TRUE)
         {
-            std::cout << "Button is selected!" << std::endl;
+            // std::cout << "Button is selected!" << std::endl;
             SDL_PushEvent(&event);
         }
     }
