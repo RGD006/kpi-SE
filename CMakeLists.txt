@@ -12,6 +12,7 @@ include_directories(src
                     src/Pen                    
                     src/Shapes
                     src/WindowInteraction
+                    src/Entity
 )
 
 add_executable(bitmap_graphic 
@@ -26,6 +27,7 @@ add_executable(bitmap_graphic
                 src/WindowInteraction/Button.cpp
                 src/WindowInteraction/Mouse.cpp
                 src/WindowInteraction/ButtonEvents.cpp
+                src/Entity/Entity.cpp
 ) 
 
 set_property(TARGET bitmap_graphic PROPERTY CXX_STANDARD 20)
