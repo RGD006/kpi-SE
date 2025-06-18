@@ -2,7 +2,7 @@
 #include <iostream>
 
 Rectangle::Rectangle(u32 w, u32 h, SDL_Point center_point)
-    : IObject(w, h, center_point)
+    : Object(w, h, center_point)
 {
 }
 

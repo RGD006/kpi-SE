@@ -16,7 +16,7 @@ Pen::Pen(color_t _color)
     shape = new Circle(5, createPoint(0, 0), true);
 }
 
-Pen::Pen(IObject *_shape)
+Pen::Pen(Object *_shape)
 {
     color = color_t(0x0000000);
     if (_shape)
@@ -30,7 +30,7 @@ Pen::Pen(IObject *_shape)
     }
 }
 
-Pen::Pen(color_t _color, IObject *_shape)
+Pen::Pen(color_t _color, Object *_shape)
 {
     if (_shape)
     {
@@ -63,7 +63,7 @@ bool Pen::calculateScale(SDL_Rect scale, int &x, int &y)
     return true;
 }
 
-void Pen::changeShape(IObject *new_shape)
+void Pen::changeShape(Object *new_shape)
 {
     assert(new_shape);
     shape = new_shape;
@@ -74,7 +74,7 @@ void Pen::deletePen()
     delete shape;
 }
 
-IObject *Pen::getShape(SDL_Point position)
+Object *Pen::getShape(SDL_Point position)
 {
     shape->setCenterPoints(position);
     return shape;
@@ -94,7 +94,7 @@ bool *Pen::getMoveState() { return &start_move; }
 
 void Pen::increaseSize(u32 value)
 {
-    IObject *shape = getShape(createPoint(0, 0));
+    Object *shape = getShape(createPoint(0, 0));
     u32 old_w = shape->getW(), old_h = shape->getH();
     shape->setW(old_w + value);
     shape->setH(old_h + value);
@@ -102,7 +102,7 @@ void Pen::increaseSize(u32 value)
 
 void Pen::decreaseSize(i32 value)
 {
-    IObject *shape = getShape(createPoint(0, 0));
+    Object *shape = getShape(createPoint(0, 0));
     i32 old_w = shape->getW(), old_h = shape->getH();
     if (old_w - value > 0 && old_h - value > 0)
     {

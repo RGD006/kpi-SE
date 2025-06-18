@@ -3,7 +3,7 @@
 #include <iostream>
 
 Circle::Circle(u32 r, SDL_Point center_point, bool filled = false)
-    : IObject(r * 2, r * 2, center_point), fill_full(filled), radius(r)
+    : Object(r * 2, r * 2, center_point), fill_full(filled), radius(r)
 {
 }
 

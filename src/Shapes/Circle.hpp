@@ -3,7 +3,7 @@
 #include "Object.hpp"
 #include "typeof.hpp"
 
-class Circle : public IObject 
+class Circle : public Object 
 {
 private:
     u32 radius;    

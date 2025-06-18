@@ -8,7 +8,7 @@ class Pen
 {
 private:
     color_t color;
-    IObject *shape;
+    Object *shape;
     Canvas *canvas;
     Mouse *mouse;
     bool start_move; // flag for indication if mouse move in drawing mode
@@ -17,11 +17,11 @@ private:
 public:
     Pen();
     Pen(color_t);
-    Pen(IObject *);
-    Pen(color_t, IObject *);
+    Pen(Object *);
+    Pen(color_t, Object *);
     void pinMouse(Mouse *mouse);
     void listenEvents(void *arg);
-    void changeShape(IObject *);
+    void changeShape(Object *);
     void increaseSize(u32);
     void decreaseSize(i32);
     void changeColor(u32);
@@ -29,7 +29,7 @@ public:
     bool nowEraser(void);
     void addCanvas(Canvas *canvas);
     bool *getMoveState();
-    IObject *getShape(SDL_Point);
+    Object *getShape(SDL_Point);
     Canvas *getCanvas();
     ~Pen();
 };

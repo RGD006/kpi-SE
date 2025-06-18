@@ -20,5 +20,5 @@ public:
     void render();
     SDL_Rect getScale();
     void setBackground(color_t, SDL_Rect *);
-    void addObject(IObject *);
+    void addObject(Object *);
 };

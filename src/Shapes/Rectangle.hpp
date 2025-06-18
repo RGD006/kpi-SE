@@ -1,6 +1,6 @@
 #include "Object.hpp"
 
-class Rectangle : public IObject
+class Rectangle : public Object
 {
 private:
 public:

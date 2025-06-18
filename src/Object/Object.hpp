@@ -14,7 +14,7 @@ struct color_t
     }
 };
 
-class IObject
+class Object
 {
 protected:
     color_t color;
@@ -23,8 +23,8 @@ protected:
     i32 h;
 
 public:
-    IObject();
-    IObject(u32, u32, SDL_Point);
+    Object();
+    Object(u32, u32, SDL_Point);
     virtual void setColor(color_t);
     virtual color_t getColor(void);
     virtual u32 getW(void);
