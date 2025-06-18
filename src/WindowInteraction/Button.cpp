@@ -24,21 +24,6 @@ Button::Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_
 {
 }
 
-void Button::render()
-{
-    if (!texture)
-        throw "No texture";
-
-    if (isEmptyRect(source_rect))
-    {
-        SDL_RenderCopy(renderer, texture, nullptr, &destination_rect);
-    }
-    else
-    {
-        SDL_RenderCopy(renderer, texture, &source_rect, &destination_rect);
-    }
-}
-
 void Button::listenEvent(Mouse &mouse)
 {
     if (mouse.getState(MOUSE_CLICK))

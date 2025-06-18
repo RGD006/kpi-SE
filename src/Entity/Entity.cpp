@@ -1,5 +1,6 @@
 #include "Entity.hpp"
 #include "Object.hpp"
+#include <iostream>
 #include <SDL2/SDL_image.h>
 
 Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Renderer *render)
@@ -10,9 +11,11 @@ Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Rend
     texture = nullptr;
     event.type = SDL_USEREVENT;
     event.user.code = button_event;
+    event.user.data1 = nullptr;
     renderer = render;
     source_rect = source;
     destination_rect = destination;
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_NONE);
 }
 
 Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Renderer *render, SDL_Texture *texture)
@@ -35,7 +38,17 @@ Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Rend
 
 void Entity::render()
 {
-    // own function to draw
+    if (!texture)
+        throw "No texture";
+
+    if (isEmptyRect(source_rect))
+    {
+        SDL_RenderCopy(renderer, texture, nullptr, &destination_rect);
+    }
+    else
+    {
+        SDL_RenderCopy(renderer, texture, &source_rect, &destination_rect);
+    }
 }
 
 void Entity::setTexture(SDL_Texture *texture)
@@ -53,16 +66,20 @@ void Entity::setTexture(const char *path)
 
 void Entity::setTexture(u32 color)
 {
-    SDL_Rect rect = {0, 0, destination_rect.w, destination_rect.h};
+    if (texture)
+        SDL_DestroyTexture(texture);
+
     texture = SDL_CreateTexture(renderer,
                                 SDL_PIXELFORMAT_RGBA8888,
                                 SDL_TEXTUREACCESS_TARGET,
-                                rect.w, rect.h);
+                                destination_rect.w, destination_rect.h);
+
     color_t rect_color(color);
     SDL_SetRenderTarget(renderer, texture);
     SDL_SetRenderDrawColor(renderer, rect_color.r, rect_color.g, rect_color.b, rect_color.a);
     SDL_RenderClear(renderer);
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &destination_rect);
+    SDL_SetRenderTarget(renderer, nullptr);
 }
 
 void Entity::listenEvent(void)

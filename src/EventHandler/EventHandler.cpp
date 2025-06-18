@@ -52,7 +52,14 @@ void EventHandler::run(void)
                 auto evnt = events.at(incoming_event.user.code);
                 for (const auto &action : evnt)
                 {
-                    action.function(action.arg);
+                    if (incoming_event.user.data1 == nullptr)
+                    {
+                        action.function(action.arg);
+                    }
+                    else
+                    {
+                        action.function(incoming_event.user.data1);
+                    }
                 }
             }
         }

@@ -4,7 +4,7 @@
 #include <typeof.hpp>
 #include <vector>
 
-#include "Button.hpp"
+#include "Entity.hpp"
 #include "EventHandler.hpp"
 #include "Canvas.hpp"
 
@@ -15,7 +15,7 @@ private:
     SDL_Renderer *renderer; 
     EventHandler event_handler;
     Canvas canvas;
-    std::vector<Button*> buttons;
+    std::vector<Entity*> ents;
     int width, height;
 public:
     Window(const char *, u32, u32);

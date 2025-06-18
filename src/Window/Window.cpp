@@ -63,7 +63,15 @@ void Window::run(void)
         {
             return;
         }
-        pen.changeColor(*reinterpret_cast<u32 *>(arg));
+
+        u32 *new_color = new u32; 
+        new_color = reinterpret_cast<u32 *>(arg);
+        pen.changeColor(*new_color);
+        SDL_Event change_color_event;
+        change_color_event.type = SDL_USEREVENT;
+        change_color_event.user.code = BUTTON_CHANGE_COLOR_ENTITY;
+        change_color_event.user.data1 = new_color;
+        SDL_PushEvent(&change_color_event);
     };
     auto pen_increase_size = [&pen](void *arg)
     { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
@@ -89,7 +97,8 @@ void Window::run(void)
         pen.changeColor(prev_color);
     };
     auto pen_change_shape_circ = [&pen, &circ](void *arg)
-    {color_t prev_color;
+    {
+        color_t prev_color;
         if (pen.nowEraser())
         {
             prev_color = color_t(0x000000FF);
@@ -119,20 +128,20 @@ void Window::run(void)
     Button button_change_shape_rect(BUTTON_CHANGE_SHAPE_RECT, createRect(0, 0, 0, 0), rect_change_pen_rect, renderer, "images/draw_rect.png");
     Button button_change_shape_circ(BUTTON_CHANGE_SHAPE_CIRC, createRect(0, 0, 0, 0), rect_change_pen_circ, renderer, "images/draw_circle.png");
 
-    buttons.push_back(&button_red);
-    buttons.push_back(&button_yellow);
-    buttons.push_back(&button_blue);
-    buttons.push_back(&button_green);
-    buttons.push_back(&button_pink);
-    buttons.push_back(&button_purple);
-    buttons.push_back(&button_white);
-    buttons.push_back(&button_grey);
-    buttons.push_back(&button_black);
-    buttons.push_back(&button_eraser);
-    buttons.push_back(&button_increase_pen_size);
-    buttons.push_back(&button_decrease_pen_size);
-    buttons.push_back(&button_change_shape_rect);
-    buttons.push_back(&button_change_shape_circ);
+    ents.push_back(&button_red);
+    ents.push_back(&button_yellow);
+    ents.push_back(&button_blue);
+    ents.push_back(&button_green);
+    ents.push_back(&button_pink);
+    ents.push_back(&button_purple);
+    ents.push_back(&button_white);
+    ents.push_back(&button_grey);
+    ents.push_back(&button_black);
+    ents.push_back(&button_eraser);
+    ents.push_back(&button_increase_pen_size);
+    ents.push_back(&button_decrease_pen_size);
+    ents.push_back(&button_change_shape_rect);
+    ents.push_back(&button_change_shape_circ);
 
     event_handler.addButton(&button_red);
     event_handler.addButton(&button_yellow);
@@ -149,7 +158,20 @@ void Window::run(void)
     event_handler.addButton(&button_change_shape_rect);
     event_handler.addButton(&button_change_shape_circ);
 
+    Entity setted_color(0x00, createRect(0, 0, 0, 0), createRect(500, 0, 50, 50), renderer, "images/border.png");
+    ents.push_back(&setted_color);
+
+    auto change_setted_color_entity = [&setted_color](void *arg)
+    {
+        u32 *new_color = reinterpret_cast<u32 *>(arg);
+        if (*new_color != 0x00000000)
+        {
+            setted_color.setTexture(*new_color);
+        }
+    };
+
     event_handler.addEvent(LISTEN_EVENT_ENTITY, pen_listen_mouse, nullptr);
+    event_handler.addEvent(BUTTON_CHANGE_COLOR_ENTITY, change_setted_color_entity, nullptr);
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_INCREASE_PEN_SIZE, pen_increase_size, reinterpret_cast<void *>(&change_pen_size));
@@ -176,7 +198,7 @@ void Window::run(void)
 
         event_handler.run();
 
-        for (auto &button : buttons)
+        for (auto &button : ents)
         {
             button->render();
         }
