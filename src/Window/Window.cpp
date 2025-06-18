@@ -71,10 +71,7 @@ void Window::run(void)
         SDL_Event change_color_event;
         change_color_event.type = SDL_USEREVENT;
         change_color_event.user.code = BUTTON_CHANGE_COLOR_ENTITY;
-        change_color_event.user.data1 = new_color;
-        SDL_PushEvent(&change_color_event);
-    };
-    auto pen_increase_size = [&pen](void *arg)
+        change_color_event.user.data1 = new_color; SDL_PushEvent(&change_color_event); }; auto pen_increase_size = [&pen](void *arg)
     { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
     auto pen_decrease_size = [&pen](void *arg)
     { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
@@ -114,6 +111,19 @@ void Window::run(void)
         pen.changeShape(circ);
         pen.changeColor(prev_color);
     };
+    auto pen_set_draw_rectangle = [&pen, &rect](void *arg)
+    {
+        std::cout << "Change draw rectangle" << std::endl;
+        pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
+        pen.changeShape(rect);
+        pen.changeColor(color_black);
+    };
+    auto pen_set_draw_circle = [&pen, &circ](void *arg)
+    {
+        pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
+        pen.changeShape(circ);
+        pen.changeColor(color_black);
+    };
 
     u32 change_pen_size = 3;
 
@@ -131,6 +141,8 @@ void Window::run(void)
     Button button_decrease_pen_size(BUTTON_DECREASE_PEN_SIZE, createRect(0, 0, 0, 0), rect_decrease_pen_size, renderer, "images/minus.png");
     Button button_change_shape_rect(BUTTON_CHANGE_SHAPE_RECT, createRect(0, 0, 0, 0), rect_change_pen_rect, renderer, "images/draw_rect.png");
     Button button_change_shape_circ(BUTTON_CHANGE_SHAPE_CIRC, createRect(0, 0, 0, 0), rect_change_pen_circ, renderer, "images/draw_circle.png");
+    Button button_set_draw_rect(BUTTON_SET_DRAW_RECTANGLE, createRect(0, 0, 0, 0), rect_set_rectangle_shape, renderer, "images/rectangle.png");
+    Button button_set_draw_circ(BUTTON_SET_DRAW_CIRCLE, createRect(0, 0, 0, 0), rect_set_circle_shape, renderer, "images/circle.png");
 
     ents.push_back(&button_red);
     ents.push_back(&button_yellow);
@@ -146,6 +158,8 @@ void Window::run(void)
     ents.push_back(&button_decrease_pen_size);
     ents.push_back(&button_change_shape_rect);
     ents.push_back(&button_change_shape_circ);
+    ents.push_back(&button_set_draw_rect);
+    ents.push_back(&button_set_draw_circ);
 
     event_handler.addButton(&button_red);
     event_handler.addButton(&button_yellow);
@@ -161,6 +175,8 @@ void Window::run(void)
     event_handler.addButton(&button_decrease_pen_size);
     event_handler.addButton(&button_change_shape_rect);
     event_handler.addButton(&button_change_shape_circ);
+    event_handler.addButton(&button_set_draw_rect);
+    event_handler.addButton(&button_set_draw_circ);
 
     Entity setted_color(0x00, createRect(0, 0, 0, 0), createRect(500, 0, 50, 50), renderer, "images/border.png");
     ents.push_back(&setted_color);
@@ -174,6 +190,8 @@ void Window::run(void)
         }
     };
 
+    event_handler.addEvent(BUTTON_SET_DRAW_RECTANGLE, pen_set_draw_rectangle, nullptr);
+    event_handler.addEvent(BUTTON_SET_DRAW_CIRCLE, pen_set_draw_circle, nullptr); 
     event_handler.addEvent(LISTEN_EVENT_ENTITY, pen_listen_mouse, nullptr);
     event_handler.addEvent(BUTTON_CHANGE_COLOR_ENTITY, change_setted_color_entity, nullptr);
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));

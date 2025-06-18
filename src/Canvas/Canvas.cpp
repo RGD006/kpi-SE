@@ -63,3 +63,4 @@ void Canvas::render()
 }
 
 SDL_Rect Canvas::getScale() { return scale; }
+SDL_Renderer *Canvas::getRenderer() { return renderer; }

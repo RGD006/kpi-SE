@@ -157,7 +157,28 @@ void Pen::listenEvents(void *arg)
             canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
         }
         break;
+        
     case PEN_STATUS_DRAW_SHAPE:
+        SDL_SetRenderTarget(canvas->getRenderer(), nullptr);
+
+        if (mouse_states[MOUSE_HOLDING])
+        {
+            start_draw_shape_x = mouse_tip.x;
+            start_draw_shape_y = mouse_tip.y;
+            start_move = true;
+        }
+        else
+        {
+            start_move = false;
+            canvas->addObject(getShape(createPoint(start_draw_shape_x, start_draw_shape_y)));
+        }
+
+        if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
+        {
+            shape->setW(abs(mouse_tip.x - start_draw_shape_x));
+            shape->setH(abs(mouse_tip.y - start_draw_shape_y));
+        }  
+
         break;
     case PEN_STATUS_DRAW_TEXTURE:
         break;

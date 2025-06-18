@@ -19,6 +19,7 @@ public:
     Canvas();
     void render();
     SDL_Rect getScale();
+    SDL_Renderer *getRenderer();
     void setBackground(color_t, SDL_Rect *);
     void addObject(Object *);
 };

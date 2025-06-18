@@ -22,6 +22,8 @@ enum BUTTONEVENTS
    BUTTON_DECREASE_PEN_SIZE,
    BUTTON_CHANGE_SHAPE_RECT,
    BUTTON_CHANGE_SHAPE_CIRC,
+   BUTTON_SET_DRAW_RECTANGLE,
+   BUTTON_SET_DRAW_CIRCLE,
    BUTTON_BUF_SIZE,
 };
 
@@ -50,3 +52,5 @@ extern SDL_Rect rect_increase_pen_size;
 extern SDL_Rect rect_decrease_pen_size;
 extern SDL_Rect rect_change_pen_rect;
 extern SDL_Rect rect_change_pen_circ;
+extern SDL_Rect rect_set_rectangle_shape;
+extern SDL_Rect rect_set_circle_shape;

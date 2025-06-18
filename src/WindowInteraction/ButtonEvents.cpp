@@ -109,3 +109,17 @@ SDL_Rect rect_change_pen_circ = {
     .w = 50,
     .h = 50,
 };
+
+SDL_Rect rect_set_rectangle_shape = {
+    .x = 250,
+    .y = 50,
+    .w = 50,
+    .h = 50,
+};
+
+SDL_Rect rect_set_circle_shape = {
+    .x = 300,
+    .y = 50,
+    .w = 50,
+    .h = 50,
+};
