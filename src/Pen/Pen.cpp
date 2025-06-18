@@ -3,6 +3,7 @@
 #include <cassert>
 #include <bitset>
 #include <iostream>
+#include <algorithm>
 
 Pen::Pen()
 {
@@ -157,27 +158,37 @@ void Pen::listenEvents(void *arg)
             canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
         }
         break;
-        
+
     case PEN_STATUS_DRAW_SHAPE:
         SDL_SetRenderTarget(canvas->getRenderer(), nullptr);
 
-        if (mouse_states[MOUSE_HOLDING])
+        if (!mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
         {
             start_draw_shape_x = mouse_tip.x;
             start_draw_shape_y = mouse_tip.y;
             start_move = true;
         }
-        else
+        else if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
         {
-            start_move = false;
-            canvas->addObject(getShape(createPoint(start_draw_shape_x, start_draw_shape_y)));
+            i32 x, y, w, h;
+            x = std::min(start_draw_shape_x, mouse_tip.x);
+            y = std::min(start_draw_shape_y, mouse_tip.y);
+            w = std::abs(mouse_tip.x - start_draw_shape_x);
+            h = std::abs(mouse_tip.y - start_draw_shape_y);
+
+            shape->setCenterPoints(createPoint(x, y));
+            shape->setW(w);
+            shape->setH(h);
+
+            std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
+                      << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
         }
 
-        if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
+        if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_CLICK])
         {
-            shape->setW(abs(mouse_tip.x - start_draw_shape_x));
-            shape->setH(abs(mouse_tip.y - start_draw_shape_y));
-        }  
+            start_move = false;
+            canvas->addObject(getShape(shape->getCenterPoints()));
+        }
 
         break;
     case PEN_STATUS_DRAW_TEXTURE:

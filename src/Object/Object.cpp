@@ -22,7 +22,7 @@ Object::Object()
 {
 }
 
-Object::Object(u32 _w, u32 _h, SDL_Point _center_point)
+Object::Object(i32 _w, i32 _h, SDL_Point _center_point)
     : w(_w), h(_h), center_point(_center_point)
 {
 }
@@ -57,20 +57,20 @@ bool isEmptyRect(SDL_Rect rect)
     return memcmp(&rect, &empty_rect, sizeof(SDL_Rect)) == 0;
 }
 
-void Object::setW(u32 width)
+void Object::setW(i32 width)
 {
     w = width;
 }
 
-void Object::setH(u32 height)
+void Object::setH(i32 height)
 {
     h = height;
 }
 
 void Object::setColor(color_t _color) { color = _color; }
 color_t Object::getColor(void) { return color; }
-u32 Object::getW(void) { return w; }
-u32 Object::getH(void) { return h; }
+i32 Object::getW(void) { return w; }
+i32 Object::getH(void) { return h; }
 SDL_Point Object::getCenterPoints(void) { return center_point; }
 void Object::drawObject(SDL_Renderer *) {}
 void Object::setCenterPoints(SDL_Point new_points) { center_point = new_points; }

@@ -24,13 +24,13 @@ protected:
 
 public:
     Object();
-    Object(u32, u32, SDL_Point);
+    Object(i32, i32, SDL_Point);
     virtual void setColor(color_t);
     virtual color_t getColor(void);
-    virtual u32 getW(void);
-    virtual u32 getH(void);
-    virtual void setW(u32);
-    virtual void setH(u32);
+    virtual i32 getW(void);
+    virtual i32 getH(void);
+    virtual void setW(i32);
+    virtual void setH(i32);
     virtual SDL_Point getCenterPoints(void);
     virtual void drawObject(SDL_Renderer *);
     virtual void setCenterPoints(SDL_Point);

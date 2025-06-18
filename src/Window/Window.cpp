@@ -113,7 +113,6 @@ void Window::run(void)
     };
     auto pen_set_draw_rectangle = [&pen, &rect](void *arg)
     {
-        std::cout << "Change draw rectangle" << std::endl;
         pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
         pen.changeShape(rect);
         pen.changeColor(color_black);

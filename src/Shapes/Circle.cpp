@@ -2,8 +2,13 @@
 #include <cmath>
 #include <iostream>
 
-Circle::Circle(u32 r, SDL_Point center_point, bool filled = false)
-    : Object(r * 2, r * 2, center_point), fill_full(filled), radius(r)
+Circle::Circle(u32 r, SDL_Point center_point, bool filled)
+    : Object(r, r, center_point), radius_x(r), radius_y(r), fill_full(filled)
+{
+}
+
+Circle::Circle(u32 rx, u32 ry, SDL_Point center_point, bool filled)
+    : Object(rx, ry, center_point), radius_x(rx), radius_y(ry), fill_full(filled)
 {
 }
 
@@ -13,49 +18,48 @@ void Circle::drawObject(SDL_Renderer *renderer)
 
     if (fill_full)
     {
-        for (u32 w = 0; w < radius * 2; w++)
+        for (int y = -static_cast<int>(radius_y); y <= static_cast<int>(radius_y); y++)
         {
-            for (u32 h = 0; h < radius * 2; h++)
+            for (int x = -static_cast<int>(radius_x); x <= static_cast<int>(radius_x); x++)
             {
-                u32 dx = radius - w;
-                u32 dy = radius - h;
-                if ((dx * dx + dy * dy) <= (radius * radius))
+                float norm_x = static_cast<float>(x) / radius_x;
+                float norm_y = static_cast<float>(y) / radius_y;
+                if ((norm_x * norm_x + norm_y * norm_y) <= 1.0f)
                 {
-                    SDL_RenderDrawPoint(renderer, center_point.x + dx, center_point.y + dy);
+                    SDL_RenderDrawPoint(renderer, center_point.x + x, center_point.y + y);
                 }
             }
         }
     }
     else
     {
-        const u32 segments = 360;
-
-        for (u32 i = 0; i < segments; i++)
+        const int segments = 360;
+        for (int i = 0; i < segments; i++)
         {
-            float theta = (float)i * (2.0f * M_PI / segments);
-            u32 x = (u32)(radius * cosf(theta));
-            u32 y = (u32)(radius * sinf(theta));
+            float theta = (float)i * 2.0f * M_PI / segments;
+            int x = static_cast<int>(radius_x * cosf(theta));
+            int y = static_cast<int>(radius_y * sinf(theta));
             SDL_RenderDrawPoint(renderer, center_point.x + x, center_point.y + y);
         }
     }
 }
 
-u32 Circle::getW(void)
+i32 Circle::getW(void)
 {
-    return radius;
+    return radius_x * 2;
 }
 
-u32 Circle::getH(void)
+i32 Circle::getH(void)
 {
-    return radius;
+    return radius_y * 2;
 }
 
-void Circle::setW(u32 value)
+void Circle::setW(i32 value)
 {
-    radius = value;
+    radius_x = value / 2;
 }
 
-void Circle::setH(u32 value)
+void Circle::setH(i32 value)
 {
-    radius = value;
+    radius_y = value / 2;
 }
