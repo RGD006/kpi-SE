@@ -4,10 +4,20 @@
 #include "Canvas.hpp"
 #include "Shapes.hpp"
 
+enum PENSTATUS
+{
+    PEN_STATUS_DRAW_PIXEL,
+    PEN_STATUS_DRAW_SHAPE,
+    PEN_STATUS_DRAW_TEXTURE,
+    PEN_STATUS_DRAW_NO,
+    PEN_STATUS_DRAW_BUFFER_SIZE,
+};
+
 class Pen
 {
 private:
     color_t color;
+    PENSTATUS draw_status;
     Object *shape;
     Canvas *canvas;
     Mouse *mouse;
@@ -22,6 +32,8 @@ public:
     void pinMouse(Mouse *mouse);
     void listenEvents(void *arg);
     void changeShape(Object *);
+    void changeStatus(PENSTATUS new_status);
+    PENSTATUS getStatus();
     void increaseSize(u32);
     void decreaseSize(i32);
     void changeColor(u32);

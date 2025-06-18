@@ -50,6 +50,7 @@ void Window::run(void)
     Circle *circ = new Circle(10, createPoint(0, 0), true);
 
     Pen pen;
+    pen.changeStatus(PEN_STATUS_DRAW_NO);
     pen.changeShape(rect);
     pen.changeColor(0x000000FF);
     pen.addCanvas(&canvas);
@@ -79,6 +80,7 @@ void Window::run(void)
     { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
     auto pen_set_eraser = [&pen, &rect](void *arg)
     {
+        pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
         pen.changeShape(rect);
         pen.changeColor(color_eraser);
     };
@@ -93,6 +95,7 @@ void Window::run(void)
         {
             prev_color = pen.getShape(createPoint(0, 0))->getColor();
         }
+        pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
         pen.changeShape(rect);
         pen.changeColor(prev_color);
     };
@@ -107,6 +110,7 @@ void Window::run(void)
         {
             prev_color = pen.getShape(createPoint(0, 0))->getColor();
         }
+        pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
         pen.changeShape(circ);
         pen.changeColor(prev_color);
     };

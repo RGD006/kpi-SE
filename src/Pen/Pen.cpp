@@ -139,18 +139,39 @@ void Pen::listenEvents(void *arg)
         return;
     }
 
-    if (mouse_states[MOUSE_HOLDING])
+    switch (draw_status)
     {
-        start_move = true;
-        canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
-    }
-    else
-    {
-        start_move = false;
-    }
+    case PEN_STATUS_DRAW_PIXEL:
+        if (mouse_states[MOUSE_HOLDING])
+        {
+            start_move = true;
+            canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+        }
+        else
+        {
+            start_move = false;
+        }
 
-    if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
-    {
-        canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+        if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
+        {
+            canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+        }
+        break;
+    case PEN_STATUS_DRAW_SHAPE:
+        break;
+    case PEN_STATUS_DRAW_TEXTURE:
+        break;
+    case PEN_STATUS_DRAW_NO:
+        break;
     }
+}
+
+void Pen::changeStatus(PENSTATUS new_status)
+{
+    draw_status = new_status;
+}
+
+PENSTATUS Pen::getStatus()
+{
+    return draw_status;
 }
