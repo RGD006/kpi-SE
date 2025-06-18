@@ -39,7 +39,7 @@ void Button::render()
     }
 }
 
-void Button::listenMouse(Mouse &mouse)
+void Button::listenEvent(Mouse &mouse)
 {
     if (mouse.getState(MOUSE_CLICK))
     {

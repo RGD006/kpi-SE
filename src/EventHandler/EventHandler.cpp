@@ -27,7 +27,7 @@ event_function_t::event_function_t(std::function<void(void *)> function, void *a
 void EventHandler::addEvent(u32 new_event, std::function<void(void *)> function, void *arg)
 {
     // std::cout << "Add event: " << new_event << std::endl;
-    if (new_event == LISTEN_ALWAYS)
+    if (new_event == LISTEN_EVENT_ENTITY)
         listen_always_functions.push_back(event_function_t(function, arg));
     else
         events[new_event].push_back(event_function_t(function, arg));
@@ -71,12 +71,10 @@ void EventHandler::run(void)
             action.function(action.arg);
         }
 
-        /* Mouse events listening*/
-
         // listen if button selected
         for (auto &button : buttons)
         {
-            button->listenMouse(mouse);
+            button->listenEvent(mouse);
         }
     }
 

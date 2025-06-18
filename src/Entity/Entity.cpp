@@ -65,6 +65,16 @@ void Entity::setTexture(u32 color)
     SDL_RenderFillRect(renderer, &rect);
 }
 
+void Entity::listenEvent(void)
+{
+    // own function realization
+}
+
+void Entity::sendEvent(void)
+{
+    // own function realization
+}
+
 Entity::~Entity()
 {
     if (texture)

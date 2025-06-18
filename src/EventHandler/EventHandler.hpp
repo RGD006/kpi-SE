@@ -9,7 +9,7 @@
 #include "Button.hpp"
 
 #define SDL_NO_BUTTON (0)
-#define LISTEN_ALWAYS (UINT32_MAX)
+#define LISTEN_EVENT_ENTITY (UINT32_MAX)
 
 struct event_function_t
 {

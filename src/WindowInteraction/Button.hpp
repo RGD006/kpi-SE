@@ -17,6 +17,6 @@ public:
     Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, const char *path_to_texture);
     Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_render, u32 color);
     void render(void);
-    void listenMouse(Mouse &mouse);
+    void listenEvent(Mouse &mouse);
     ~Button();
 };

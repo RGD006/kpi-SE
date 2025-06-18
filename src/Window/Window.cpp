@@ -149,7 +149,7 @@ void Window::run(void)
     event_handler.addButton(&button_change_shape_rect);
     event_handler.addButton(&button_change_shape_circ);
 
-    event_handler.addEvent(LISTEN_ALWAYS, pen_listen_mouse, nullptr);
+    event_handler.addEvent(LISTEN_EVENT_ENTITY, pen_listen_mouse, nullptr);
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_INCREASE_PEN_SIZE, pen_increase_size, reinterpret_cast<void *>(&change_pen_size));
