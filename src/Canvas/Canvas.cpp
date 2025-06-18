@@ -52,7 +52,7 @@ void Canvas::setBackground(color_t color, SDL_Rect *rect)
 void Canvas::addObject(Object *object)
 {
     SDL_SetRenderTarget(renderer, canvas_texture);
-    object->drawObject(renderer);
+    object->render(renderer);
     SDL_SetRenderTarget(renderer, nullptr);
 }
 

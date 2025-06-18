@@ -180,8 +180,17 @@ void Pen::listenEvents(void *arg)
             shape->setW(w);
             shape->setH(h);
 
-            std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
-                      << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
+            // std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
+            //           << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
+        }
+
+        if (mouse_states[MOUSE_HOLDING])
+        {
+            std::cout << "Render" << std::endl;
+            shape->render(canvas->getRenderer());
+            SDL_Event event_continue_render;
+            event_continue_render.type = SDL_MOUSEMOTION;
+            SDL_PushEvent(&event_continue_render);
         }
 
         if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_CLICK])

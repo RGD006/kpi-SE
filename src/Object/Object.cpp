@@ -72,6 +72,6 @@ color_t Object::getColor(void) { return color; }
 i32 Object::getW(void) { return w; }
 i32 Object::getH(void) { return h; }
 SDL_Point Object::getCenterPoints(void) { return center_point; }
-void Object::drawObject(SDL_Renderer *) {}
+void Object::render(SDL_Renderer *) {}
 void Object::setCenterPoints(SDL_Point new_points) { center_point = new_points; }
 

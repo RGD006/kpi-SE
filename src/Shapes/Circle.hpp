@@ -19,5 +19,5 @@ public:
     i32 getW(void) override;
     i32 getH(void) override;
 
-    void drawObject(SDL_Renderer *renderer) override;
+    void render(SDL_Renderer *renderer) override;
 };

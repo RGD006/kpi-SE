@@ -32,7 +32,7 @@ public:
     virtual void setW(i32);
     virtual void setH(i32);
     virtual SDL_Point getCenterPoints(void);
-    virtual void drawObject(SDL_Renderer *);
+    virtual void render(SDL_Renderer *);
     virtual void setCenterPoints(SDL_Point);
 };
 

@@ -12,7 +12,7 @@ Circle::Circle(u32 rx, u32 ry, SDL_Point center_point, bool filled)
 {
 }
 
-void Circle::drawObject(SDL_Renderer *renderer)
+void Circle::render(SDL_Renderer *renderer)
 {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
