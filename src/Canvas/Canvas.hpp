@@ -9,9 +9,9 @@ class Canvas : public Entity
 {
 private:
     SDL_Rect aim_destination;
-    SDL_Texture *background_texture; 
+    SDL_Texture *background_texture;
     SDL_Texture *canvas_texture;
-    SDL_Texture *aim_texture; 
+    SDL_Texture *aim_texture;
     std::list<SDL_Texture *> prev_canvas_texture;
     std::list<SDL_Texture *> undo_canvas_texture;
 
@@ -27,4 +27,5 @@ public:
     void setBackground(color_t, SDL_Rect *);
     void setAimTexture(Object *);
     void addObject(Object *);
+    void fillAt(i32 x, i32 y, color_t fill_color);
 };

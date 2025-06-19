@@ -1,4 +1,5 @@
 #include "Canvas.hpp"
+#include <queue>
 #include <iostream>
 
 #define MAX_QUEUE_SIZE (15)
@@ -74,8 +75,6 @@ void Canvas::saveCanvasUndo(SDL_Texture *texture)
 {
     SDL_Texture *new_prev_texture = Entity::copyTexture(renderer, texture, destination_rect.w, destination_rect.h);
 
-    std::cout << "New object undo" << std::endl;
-
     if (undo_canvas_texture.size() <= MAX_QUEUE_SIZE)
     {
         undo_canvas_texture.push_front(new_prev_texture);
@@ -149,8 +148,6 @@ void Canvas::undo(void)
         SDL_Texture *prev = undo_canvas_texture.front();
         undo_canvas_texture.pop_front();
         
-        std::cout << "Delete undo" << std::endl;
-
         canvas_texture = Entity::copyTexture(renderer, prev, destination_rect.w, destination_rect.h); 
 
         saveCanvasRedo(canvas_texture);
@@ -172,4 +169,76 @@ void Canvas::redo(void)
 
         SDL_DestroyTexture(redo_tex);
     }
+}
+
+void Canvas::fillAt(i32 x, i32 y, color_t fill_color)
+{
+    int width = destination_rect.w;
+    int height = destination_rect.h;
+
+    // Выделяем буфер под пиксели
+    std::vector<u32> pixels(width * height);
+    SDL_Rect rect = {0, 0, width, height};
+
+    // Считываем пиксели напрямую из canvas_texture
+    if (SDL_SetRenderTarget(renderer, canvas_texture) != 0 ||
+        SDL_RenderReadPixels(renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels.data(), width * sizeof(u32)) != 0)
+    {
+        std::cerr << "Failed to read pixels: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    SDL_SetRenderTarget(renderer, nullptr);
+
+    SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    u32 start_color = pixels[y * width + x];
+
+    u8 sr, sg, sb;
+    SDL_GetRGB(start_color, format, &sr, &sg, &sb);
+
+    if (fill_color.r == sr && fill_color.g == sg && fill_color.b == sb)
+    {
+        SDL_FreeFormat(format);
+        return;
+    }
+
+    u32 new_color = SDL_MapRGBA(format, fill_color.r, fill_color.g, fill_color.b, fill_color.a);
+
+    std::queue<std::pair<int, int>> q;
+    q.push({x, y});
+
+    while (!q.empty())
+    {
+        auto [cx, cy] = q.front();
+        q.pop();
+
+        if (cx < 0 || cy < 0 || cx >= width || cy >= height)
+            continue;
+
+        u32 &current_pixel = pixels[cy * width + cx];
+        u8 r, g, b;
+        SDL_GetRGB(current_pixel, format, &r, &g, &b);
+
+        if (r != sr || g != sg || b != sb)
+            continue;
+
+        current_pixel = new_color;
+
+        q.push({cx + 1, cy});
+        q.push({cx - 1, cy});
+        q.push({cx, cy + 1});
+        q.push({cx, cy - 1});
+    }
+
+    SDL_FreeFormat(format);
+
+    SDL_Texture *result = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+                                            SDL_TEXTUREACCESS_STREAMING, width, height);
+    SDL_UpdateTexture(result, nullptr, pixels.data(), width * sizeof(u32));
+    SDL_SetTextureBlendMode(result, SDL_BLENDMODE_BLEND);
+
+    SDL_SetRenderTarget(renderer, canvas_texture);
+    SDL_RenderCopy(renderer, result, nullptr, nullptr);
+    SDL_SetRenderTarget(renderer, nullptr);
+    SDL_DestroyTexture(result);
 }

@@ -236,6 +236,14 @@ void Pen::listenEvents(void *arg)
             continueRender();
         }
         break;
+    case PEN_STATUS_FILL:
+        if (mouse_states[MOUSE_END_CLICK])
+        {
+            canvas->saveCanvasUndo(canvas->getCanvasTexture());
+            canvas->fillAt(mouse_tip_scaled.x, mouse_tip_scaled.y, shape->getColor());
+        }
+
+        break;
     case PEN_STATUS_DRAW_TEXTURE:
         break;
     case PEN_STATUS_DRAW_NO:

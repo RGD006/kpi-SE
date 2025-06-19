@@ -110,8 +110,9 @@ void Window::run(void)
     Button button_change_shape_circ(BUTTON_CHANGE_SHAPE_CIRC, createRect(0, 0, 0, 0), rect_change_pen_circ, renderer, "images/draw_circle.png");
     Button button_set_draw_rect(BUTTON_SET_DRAW_RECTANGLE, createRect(0, 0, 0, 0), rect_set_rectangle_shape, renderer, "images/rectangle.png");
     Button button_set_draw_circ(BUTTON_SET_DRAW_CIRCLE, createRect(0, 0, 0, 0), rect_set_circle_shape, renderer, "images/circle.png");
-    Button button_undo(BUtton_CANVAS_UNDO, createRect(0, 0, 0, 0), createRect(0, 100, 100, 50), renderer, "images/undo.png");
+    Button button_undo(BUTTON_CANVAS_UNDO, createRect(0, 0, 0, 0), createRect(0, 100, 100, 50), renderer, "images/undo.png");
     Button button_redo(BUTTON_CANVAS_REDO, createRect(0, 0, 0, 0), createRect(100, 100, 100, 50), renderer, "images/redo.png");
+    Button button_fill(BUTTON_FILL, createRect(0, 0, 0, 0), createRect(350, 50, 50, 50), renderer, "images/fill.png");
 
     Pen pen;
     pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
@@ -122,6 +123,11 @@ void Window::run(void)
 
     sendNewColor(color_black);
     sendNewInstrument(button_change_shape_rect.getTexture());
+
+    auto pen_change_fill = [&pen](void *arg)
+    {
+        pen.changeStatus(PEN_STATUS_FILL);
+    };
 
     auto pen_listen_mouse = [&pen](void *arg)
     {
@@ -244,7 +250,9 @@ void Window::run(void)
     ents.push_back(&button_set_draw_circ);
     ents.push_back(&button_undo);
     ents.push_back(&button_redo);
+    ents.push_back(&button_fill);
 
+    event_handler.addButton(&button_fill);
     event_handler.addButton(&button_undo);
     event_handler.addButton(&button_redo);
     event_handler.addButton(&button_red);
@@ -264,8 +272,9 @@ void Window::run(void)
     event_handler.addButton(&button_set_draw_rect);
     event_handler.addButton(&button_set_draw_circ);
 
+    event_handler.addEvent(BUTTON_FILL, pen_change_fill, nullptr);
     event_handler.addEvent(BUTTON_CANVAS_REDO, canvasRedo, &canvas);
-    event_handler.addEvent(BUtton_CANVAS_UNDO, canvasUndo, &canvas);
+    event_handler.addEvent(BUTTON_CANVAS_UNDO, canvasUndo, &canvas);
     event_handler.addEvent(ENTITY_CHANGE_INSTRUMENT, change_setted_instrument_entity, nullptr);
     event_handler.addEvent(BUTTON_SET_DRAW_RECTANGLE, pen_set_draw_rectangle, nullptr);
     event_handler.addEvent(BUTTON_SET_DRAW_CIRCLE, pen_set_draw_circle, nullptr);
