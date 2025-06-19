@@ -148,15 +148,20 @@ void Pen::listenEvents(void *arg)
     case PEN_STATUS_DRAW_PIXEL:
         shape->setStartPoints(createPoint(mouse_tip_scaled.x, mouse_tip_scaled.y));
 
+        if (mouse_states[MOUSE_START_CLICK])
+        {
+            canvas->saveCanvasUndo(canvas->getCanvasTexture());
+        }
+
         if (mouse_states[MOUSE_HOLDING])
         {
             start_move = true;
             canvas->addObject(shape);
         }
-        else if (mouse_states[MOUSE_END_CLICK])
+
+        if (mouse_states[MOUSE_END_CLICK])
         {
             start_move = false;
-            canvas->saveCanvasTexture();
         }
 
         if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
@@ -204,8 +209,8 @@ void Pen::listenEvents(void *arg)
             shape->setW(w);
             shape->setH(h);
             start_move = false;
+            canvas->saveCanvasUndo(canvas->getCanvasTexture());
             canvas->addObject(getShape(*shape->getStartPoints()));
-            canvas->saveCanvasTexture();
             canvas->setAimTexture(nullptr);
             aim_start_draw_shape_x = 0;
             aim_start_draw_shape_y = 0;

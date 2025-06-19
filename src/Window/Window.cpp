@@ -264,7 +264,8 @@ void Window::run(void)
     event_handler.addButton(&button_set_draw_rect);
     event_handler.addButton(&button_set_draw_circ);
 
-
+    event_handler.addEvent(BUTTON_CANVAS_REDO, canvasRedo, &canvas);
+    event_handler.addEvent(BUtton_CANVAS_UNDO, canvasUndo, &canvas);
     event_handler.addEvent(ENTITY_CHANGE_INSTRUMENT, change_setted_instrument_entity, nullptr);
     event_handler.addEvent(BUTTON_SET_DRAW_RECTANGLE, pen_set_draw_rectangle, nullptr);
     event_handler.addEvent(BUTTON_SET_DRAW_CIRCLE, pen_set_draw_circle, nullptr);

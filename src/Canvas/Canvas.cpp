@@ -53,20 +53,39 @@ void Canvas::addObject(Object *object)
     SDL_SetRenderTarget(renderer, nullptr);
 }
 
-void Canvas::saveCanvasTexture(void)
+void Canvas::saveCanvasRedo(SDL_Texture *texture)
 {
-    SDL_Texture *new_prev_texture = Entity::copyTexture(renderer, canvas_texture, destination_rect.w, destination_rect.h);
-    
+    SDL_Texture *new_prev_texture = Entity::copyTexture(renderer, texture, destination_rect.w, destination_rect.h);
+
     if (prev_canvas_texture.size() <= MAX_QUEUE_SIZE)
     {
-        prev_canvas_texture.push(new_prev_texture);
+        prev_canvas_texture.push_front(new_prev_texture);
     }
     else
     {
         SDL_Texture *delete_prev_texture = prev_canvas_texture.front();
-        prev_canvas_texture.pop();
+        prev_canvas_texture.pop_back();
         SDL_DestroyTexture(delete_prev_texture);
-        prev_canvas_texture.push(new_prev_texture);
+        prev_canvas_texture.push_front(new_prev_texture);
+    }
+}
+
+void Canvas::saveCanvasUndo(SDL_Texture *texture)
+{
+    SDL_Texture *new_prev_texture = Entity::copyTexture(renderer, texture, destination_rect.w, destination_rect.h);
+
+    std::cout << "New object undo" << std::endl;
+
+    if (undo_canvas_texture.size() <= MAX_QUEUE_SIZE)
+    {
+        undo_canvas_texture.push_front(new_prev_texture);
+    }
+    else
+    {
+        SDL_Texture *delete_undo_texture = prev_canvas_texture.front();
+        undo_canvas_texture.pop_back();
+        SDL_DestroyTexture(delete_undo_texture);
+        undo_canvas_texture.push_front(new_prev_texture);
     }
 }
 
@@ -121,4 +140,36 @@ void Canvas::setAimTexture(Object *aim)
 SDL_Texture *Canvas::getCanvasTexture()
 {
     return canvas_texture;
+}
+
+void Canvas::undo(void)
+{
+    if (!undo_canvas_texture.empty())
+    {
+        SDL_Texture *prev = undo_canvas_texture.front();
+        undo_canvas_texture.pop_front();
+        
+        std::cout << "Delete undo" << std::endl;
+
+        canvas_texture = Entity::copyTexture(renderer, prev, destination_rect.w, destination_rect.h); 
+
+        saveCanvasRedo(canvas_texture);
+
+        SDL_DestroyTexture(prev);
+    }
+}
+
+void Canvas::redo(void)
+{
+    if (!prev_canvas_texture.empty())
+    {
+        SDL_Texture *redo_tex = prev_canvas_texture.front();
+        prev_canvas_texture.pop_front();
+
+        canvas_texture = Entity::copyTexture(renderer, redo_tex, destination_rect.w, destination_rect.h);
+
+        saveCanvasUndo(canvas_texture);
+
+        SDL_DestroyTexture(redo_tex);
+    }
 }

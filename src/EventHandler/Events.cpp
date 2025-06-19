@@ -123,3 +123,15 @@ SDL_Rect rect_set_circle_shape = {
     .w = 50,
     .h = 50,
 };
+
+void canvasUndo(void *arg)
+{
+    Canvas *canvas = reinterpret_cast<Canvas *>(arg);
+    canvas->undo();
+}
+
+void canvasRedo(void *arg)
+{
+    Canvas *canvas = reinterpret_cast<Canvas *>(arg);
+    canvas->redo();
+}

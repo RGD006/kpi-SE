@@ -4,6 +4,9 @@
 #include "Button.hpp"
 #include <vector>
 
+void canvasUndo(void *arg);
+void canvasRedo(void *arg);
+
 enum BUTTONEVENTS
 {
    BUTTON_SAVE,
