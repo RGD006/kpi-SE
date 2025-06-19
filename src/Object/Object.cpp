@@ -27,6 +27,14 @@ Object::Object(i32 _w, i32 _h, SDL_Point _center_point)
 {
 }
 
+SDL_Point createPoint(SDL_Rect rect)
+{
+    SDL_Point tmp;
+    tmp.x = rect.x;
+    tmp.y = rect.y;
+    return tmp;
+}
+
 SDL_Point createPoint(i32 x, i32 y)
 {
     SDL_Point tmp;

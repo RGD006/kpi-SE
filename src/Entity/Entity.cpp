@@ -5,9 +5,6 @@
 
 Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Renderer *render)
 {
-    if (!render)
-        throw "window renderer is nullptr";
-
     texture = nullptr;
     event.type = SDL_USEREVENT;
     event.user.code = button_event;
@@ -16,6 +13,12 @@ Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Rend
     source_rect = source;
     destination_rect = destination;
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_NONE);
+}
+
+Entity::Entity(SDL_Rect destination_rect, SDL_Renderer *window_renderer)
+    : Entity(NO_EVENT, createRect(0, 0, 0, 0), destination_rect, window_renderer)
+{
+    texture = nullptr;
 }
 
 Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Renderer *render, SDL_Texture *texture)
@@ -100,7 +103,17 @@ Entity::~Entity()
     }
 }
 
+SDL_Rect Entity::getDest(void)
+{
+    return destination_rect;
+}
+
 SDL_Texture *Entity::getTexture(void)
 {
     return texture;
+}
+
+SDL_Renderer *Entity::getRenderer(void)
+{
+    return renderer;
 }

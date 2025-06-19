@@ -38,4 +38,5 @@ public:
 
 SDL_Point createPoint(i32, i32);
 SDL_Rect createRect(i32, i32, i32, i32);
+SDL_Point createPoint(SDL_Rect);
 bool isEmptyRect(SDL_Rect rect);

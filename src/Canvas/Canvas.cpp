@@ -2,19 +2,13 @@
 #include <iostream>
 
 Canvas::Canvas()
+    : Entity(createRect(0, 0, 0, 0), nullptr)
 {
 }
 
 Canvas::Canvas(SDL_Renderer *window_renderer, SDL_Point start_point, int _w, int _h)
-    : pos(start_point), w(_w), h(_h)
+    : Entity(createRect(start_point.x, start_point.y, _w, _h), window_renderer)
 {
-    canvas_destination = (SDL_Rect){
-        .x = start_point.x,
-        .y = start_point.y,
-        .w = w,
-        .h = h,
-    }; // canvas_destination for correct drawing in canvas
-
     renderer = window_renderer;
     if (!renderer)
     {
@@ -34,10 +28,10 @@ Canvas::Canvas(SDL_Renderer *window_renderer, SDL_Point start_point, int _w, int
 void Canvas::setBackground(color_t color, SDL_Rect *rect)
 {
     // resize background size for canvas size
-    if (rect->w != w || rect->h != h)
+    if (rect->w != destination_rect.w || rect->h != destination_rect.h)
     {
-        rect->w = w;
-        rect->h = h;
+        rect->w = destination_rect.w;
+        rect->h = destination_rect.h;
     }
 
     SDL_SetRenderTarget(renderer, background_texture);
@@ -59,8 +53,8 @@ void Canvas::addObject(Object *object)
 
 void Canvas::render()
 {
-    SDL_RenderCopy(renderer, background_texture, nullptr, &canvas_destination); // draw background_texture
-    SDL_RenderCopy(renderer, canvas_texture, nullptr, &canvas_destination);     // draw canvas
+    SDL_RenderCopy(renderer, background_texture, nullptr, &destination_rect); // draw background_texture
+    SDL_RenderCopy(renderer, canvas_texture, nullptr, &destination_rect);     // draw canvas
 
     if (aim_texture)
     {
@@ -103,16 +97,6 @@ void Canvas::setAimTexture(Object *aim)
         SDL_DestroyTexture(aim_texture);
         aim_texture = nullptr;
     }
-}
-
-SDL_Rect Canvas::getDest()
-{
-    return canvas_destination;
-}
-
-SDL_Renderer *Canvas::getRenderer()
-{
-    return renderer;
 }
 
 SDL_Texture *Canvas::getCanvasTexture()

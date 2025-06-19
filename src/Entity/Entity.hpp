@@ -5,6 +5,8 @@
 #include <SDL2/SDL_events.h>
 #include "typeof.hpp"
 
+#define NO_EVENT (-1)
+
 class Entity
 {
 protected:
@@ -14,6 +16,7 @@ protected:
     SDL_Texture *texture;
 
 public:
+    Entity(SDL_Rect destination_rect, SDL_Renderer *window_renderer);
     Entity(i32 event, SDL_Rect source_rect, SDL_Rect destination_rect, SDL_Renderer *window_render);
     Entity(i32 event, SDL_Rect source_rect, SDL_Rect destination_rect, SDL_Renderer *window_render, SDL_Texture *texture);
     Entity(i32 event, SDL_Rect source_rect, SDL_Rect destination_rect, SDL_Renderer *window_render, const char *path_to_texture);
@@ -25,5 +28,7 @@ public:
     virtual void listenEvent(void);
     virtual void sendEvent(void);
     virtual void render(void);
+    virtual SDL_Renderer *getRenderer(void);
+    virtual SDL_Rect getDest(void);
     ~Entity();
 };

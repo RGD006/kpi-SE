@@ -11,8 +11,9 @@ void exitWindow(void *arg)
 }
 
 Window::Window(const char *window_title, u32 w, u32 h)
-    : width(w), height(h)
 {
+    width = w;
+    height = h;
     if (IMG_Init(IMG_INIT_PNG) == 0)
     {
         std::cerr << "IMG init error " << IMG_GetError() << std::endl;
