@@ -23,12 +23,15 @@ Window::Window(const char *window_title, u32 w, u32 h)
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    canvas = Canvas(renderer, createPoint(0, 200), 800, 800);
+    canvas = Canvas(renderer, createPoint(0, 200), w, 800);
+
     if (!window)
     {
         std::cerr << "SDL_CreateWindow error:" << SDL_GetError() << "\n";
         exit(EXIT_FAILURE);
     }
+
+    ents.push_back(&canvas);
 }
 
 void sendNewColor(u32 new_color)
@@ -287,8 +290,6 @@ void Window::run(void)
         {
             button->render();
         }
-
-        canvas.render();
 
         event_handler.run();
 
