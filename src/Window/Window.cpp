@@ -124,9 +124,11 @@ void Window::run(void)
     sendNewColor(color_black);
     sendNewInstrument(button_change_shape_rect.getTexture());
 
-    auto pen_change_fill = [&pen](void *arg)
+    auto pen_change_fill = [&pen, &button_fill](void *arg)
     {
         pen.changeStatus(PEN_STATUS_FILL);
+        sendNewColor(pen.getShape(createPoint(0, 0))->getColor());
+        sendNewInstrument(button_fill.getTexture());
     };
 
     auto pen_listen_mouse = [&pen](void *arg)
