@@ -162,7 +162,6 @@ void Window::run(void)
         if (pen.nowEraser())
         {
             prev_color = color_t(0x000000FF);
-            sendNewColor(prev_color);
         }
         else
         {
@@ -173,6 +172,7 @@ void Window::run(void)
         rect->setH(10);
         pen.changeShape(rect);
         pen.changeColor(prev_color);
+        sendNewColor(prev_color);
         sendNewInstrument(button_change_shape_rect.getTexture());
     };
 
@@ -182,7 +182,6 @@ void Window::run(void)
         if (pen.nowEraser())
         {
             prev_color = color_t(0x000000FF);
-            sendNewColor(prev_color);
         }
         else
         {
@@ -193,6 +192,7 @@ void Window::run(void)
         circ->setH(10);
         pen.changeShape(circ);
         pen.changeColor(prev_color);
+        sendNewColor(prev_color);
         sendNewInstrument(button_change_shape_circ.getTexture());
     };
 
@@ -201,10 +201,10 @@ void Window::run(void)
         if (pen.nowEraser())
         {
             pen.changeColor(color_black);
-            sendNewColor(color_black);
         }
         pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
         pen.changeShape(rect);
+        sendNewColor(rect->getColor());
         sendNewInstrument(button_set_draw_rect.getTexture());
     };
 
@@ -213,10 +213,10 @@ void Window::run(void)
         if (pen.nowEraser())
         {
             pen.changeColor(color_black);
-            sendNewColor(color_black);
         }
         pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
         pen.changeShape(circ);
+        sendNewColor(circ->getColor());
         sendNewInstrument(button_set_draw_circ.getTexture());
     };
 
