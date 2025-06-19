@@ -16,6 +16,8 @@ void Circle::render(SDL_Renderer *renderer)
 {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
+    i32 center_x = center_point.x + radius_x, center_y = center_point.y + radius_y;
+
     if (fill_full)
     {
         for (int y = -static_cast<int>(radius_y); y <= static_cast<int>(radius_y); y++)
@@ -26,7 +28,7 @@ void Circle::render(SDL_Renderer *renderer)
                 float norm_y = static_cast<float>(y) / radius_y;
                 if ((norm_x * norm_x + norm_y * norm_y) <= 1.0f)
                 {
-                    SDL_RenderDrawPoint(renderer, center_point.x + x, center_point.y + y);
+                    SDL_RenderDrawPoint(renderer, center_x + x, center_y + y);
                 }
             }
         }
