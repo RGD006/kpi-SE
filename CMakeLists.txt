@@ -26,7 +26,7 @@ add_executable(bitmap_graphic
                 src/Pen/Pen.cpp
                 src/WindowInteraction/Button.cpp
                 src/WindowInteraction/Mouse.cpp
-                src/WindowInteraction/ButtonEvents.cpp
+                src/EventHandler/Events.cpp
                 src/Entity/Entity.cpp
 ) 
 

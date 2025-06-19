@@ -1,6 +1,6 @@
 #include "Pen.hpp"
 #include "SDL2/SDL_events.h"
-#include "ButtonEvents.hpp"
+#include "Events.hpp"
 #include <cassert>
 #include <bitset>
 #include <iostream>

@@ -2,7 +2,7 @@
 #include "SDL2/SDL_image.h"
 #include "Shapes.hpp"
 #include "Pen.hpp"
-#include "ButtonEvents.hpp"
+#include "Events.hpp"
 #include <iostream>
 
 void exitWindow(void *arg)
