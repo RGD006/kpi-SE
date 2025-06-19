@@ -84,13 +84,15 @@ void Canvas::setAimTexture(Object *aim)
         if (!aim_texture)
         {
             aim_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, aim_destination.w, aim_destination.h);
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-
-        SDL_SetRenderTarget(renderer, aim_texture);
-        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-        SDL_RenderFillRect(renderer, &aim_destination);
-        aim->render(renderer);
-        SDL_SetRenderTarget(renderer, nullptr);
+        else
+        {
+            SDL_SetRenderTarget(renderer, aim_texture);
+            SDL_RenderClear(renderer);
+            aim->render(renderer);
+            SDL_SetRenderTarget(renderer, nullptr);
+        }
     }
     else
     {
