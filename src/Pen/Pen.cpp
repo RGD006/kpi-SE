@@ -58,8 +58,8 @@ bool Pen::calculateScale(SDL_Rect scale, int &x, int &y)
         return false;
     }
 
-    x = (x - scale.x) * getCanvas()->getScale().w / scale.w;
-    y = (y - scale.y) * getCanvas()->getScale().h / scale.h;
+    x = (x - scale.x) * getCanvas()->getDest().w / scale.w;
+    y = (y - scale.y) * getCanvas()->getDest().h / scale.h;
 
     return true;
 }
@@ -77,7 +77,7 @@ void Pen::deletePen()
 
 Object *Pen::getShape(SDL_Point position)
 {
-    shape->setCenterPoints(position);
+    shape->setStartPoints(position);
     return shape;
 }
 
@@ -133,9 +133,10 @@ void Pen::listenEvents(void *arg)
         throw "No pinned mouse";
 
     const std::bitset<MOUSE_STATE_SIZE> mouse_states = mouse->getAllStates();
+    SDL_Rect mouse_tip_scaled = *mouse->getTipPos();
     SDL_Rect mouse_tip = *mouse->getTipPos();
 
-    if (!calculateScale(canvas->getScale(), mouse_tip.x, mouse_tip.y))
+    if (!calculateScale(canvas->getDest(), mouse_tip_scaled.x, mouse_tip_scaled.y))
     {
         return;
     }
@@ -143,10 +144,12 @@ void Pen::listenEvents(void *arg)
     switch (draw_status)
     {
     case PEN_STATUS_DRAW_PIXEL:
+        shape->setStartPoints(createPoint(mouse_tip_scaled.x, mouse_tip_scaled.y));
+
         if (mouse_states[MOUSE_HOLDING])
         {
             start_move = true;
-            canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+            canvas->addObject(shape);
         }
         else
         {
@@ -155,48 +158,75 @@ void Pen::listenEvents(void *arg)
 
         if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
         {
-            canvas->addObject(getShape(createPoint(mouse_tip.x, mouse_tip.y)));
+            canvas->addObject(shape);
         }
         break;
 
     case PEN_STATUS_DRAW_SHAPE:
-        SDL_SetRenderTarget(canvas->getRenderer(), nullptr);
-
         if (!mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
         {
-            start_draw_shape_x = mouse_tip.x;
-            start_draw_shape_y = mouse_tip.y;
+            start_draw_shape_x = mouse_tip_scaled.x;
+            start_draw_shape_y = mouse_tip_scaled.y;
+            aim_start_draw_shape_x = mouse_tip.x;
+            aim_start_draw_shape_y = mouse_tip.y;
             start_move = true;
         }
         else if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
         {
             i32 x, y, w, h;
-            x = std::min(start_draw_shape_x, mouse_tip.x);
-            y = std::min(start_draw_shape_y, mouse_tip.y);
-            w = std::abs(mouse_tip.x - start_draw_shape_x);
-            h = std::abs(mouse_tip.y - start_draw_shape_y);
+            x = std::min(start_draw_shape_x, mouse_tip_scaled.x);
+            y = std::min(start_draw_shape_y, mouse_tip_scaled.y);
+            w = std::abs(mouse_tip_scaled.x - start_draw_shape_x);
+            h = std::abs(mouse_tip_scaled.y - start_draw_shape_y);
 
-            shape->setCenterPoints(createPoint(x, y));
+            shape->setStartPoints(createPoint(x, y));
             shape->setW(w);
             shape->setH(h);
 
-            // std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
-            //           << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
+            std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
+                      << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
         }
 
-        if (mouse_states[MOUSE_HOLDING])
+        if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_CLICK] && start_move)
         {
-            std::cout << "Render" << std::endl;
-            shape->render(canvas->getRenderer());
+            i32 x, y, w, h;
+            x = std::min(start_draw_shape_x, mouse_tip_scaled.x);
+            y = std::min(start_draw_shape_y, mouse_tip_scaled.y);
+            w = std::abs(mouse_tip_scaled.x - start_draw_shape_x);
+            h = std::abs(mouse_tip_scaled.y - start_draw_shape_y);
+
+            shape->setStartPoints(createPoint(x, y));
+            shape->setW(w);
+            shape->setH(h);
+            start_move = false;
+            canvas->addObject(getShape(*shape->getStartPoints()));
+            canvas->setAimTexture(nullptr);
+            aim_start_draw_shape_x = 0;
+            aim_start_draw_shape_y = 0;
+            start_draw_shape_x = 0;
+            start_draw_shape_y = 0;
+        }
+
+        if (mouse_states[MOUSE_HOLDING] && start_move)
+        {
+            i32 x, y, w, h;
+            x = std::min(aim_start_draw_shape_x, mouse_tip.x);
+            y = std::min(aim_start_draw_shape_y, mouse_tip.y);
+            w = std::abs(mouse_tip.x - aim_start_draw_shape_x);
+            h = std::abs(mouse_tip.y - aim_start_draw_shape_y);
+
+            shape->setStartPoints(createPoint(x, y));
+            shape->setW(w);
+            shape->setH(h);
+
+            shape->setStartPoints(createPoint(x, y));
+            canvas->setAimTexture(shape);
+
+            // when mouse don't move SDL2 don't send event
+            // => send event which indicates that object is still drawing
             SDL_Event event_continue_render;
             event_continue_render.type = SDL_MOUSEMOTION;
             SDL_PushEvent(&event_continue_render);
-        }
-
-        if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_CLICK])
-        {
-            start_move = false;
-            canvas->addObject(getShape(shape->getCenterPoints()));
         }
 
         break;

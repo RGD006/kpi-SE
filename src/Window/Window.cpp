@@ -212,19 +212,19 @@ void Window::run(void)
 
     while (window_run)
     {
-        SDL_SetRenderTarget(renderer, nullptr);
         // draw window background
         SDL_SetRenderDrawColor(renderer, 0xA0, 0xA0, 0xA0, 0xFF);
         SDL_RenderFillRect(renderer, &window_background);
-
-        event_handler.run();
 
         for (auto &button : ents)
         {
             button->render();
         }
-
+        
         canvas.render();
+
+        event_handler.run();
+
         SDL_RenderPresent(renderer);
     }
 }

@@ -31,9 +31,9 @@ public:
     virtual i32 getH(void);
     virtual void setW(i32);
     virtual void setH(i32);
-    virtual SDL_Point getCenterPoints(void);
+    virtual SDL_Point *getStartPoints(void);
     virtual void render(SDL_Renderer *);
-    virtual void setCenterPoints(SDL_Point);
+    virtual void setStartPoints(SDL_Point);
 };
 
 SDL_Point createPoint(i32, i32);

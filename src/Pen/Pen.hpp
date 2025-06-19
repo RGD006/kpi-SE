@@ -22,6 +22,7 @@ private:
     Mouse *mouse;
     bool start_move; // flag for indication if mouse move in drawing mode
     i32 start_draw_shape_x, start_draw_shape_y;
+    i32 aim_start_draw_shape_x, aim_start_draw_shape_y;
     bool calculateScale(SDL_Rect scale, int &x, int &y);
 
 public:
@@ -42,6 +43,7 @@ public:
     void addCanvas(Canvas *canvas);
     bool *getMoveState();
     Object *getShape(SDL_Point);
+
     Canvas *getCanvas();
     ~Pen();
 };
