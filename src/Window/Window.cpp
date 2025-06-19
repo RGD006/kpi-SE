@@ -30,6 +30,17 @@ Window::Window(const char *window_title, u32 w, u32 h)
     }
 }
 
+void sendNewColor(u32 new_color)
+{
+    SDL_Event change_color_event;
+    u32 *send_color = new u32;
+    *send_color = new_color;
+    change_color_event.type = SDL_USEREVENT;
+    change_color_event.user.code = BUTTON_CHANGE_COLOR_ENTITY;
+    change_color_event.user.data1 = send_color;
+    SDL_PushEvent(&change_color_event);
+}
+
 void Window::run(void)
 {
     bool window_run = true;
@@ -49,15 +60,30 @@ void Window::run(void)
     Rectangle *rect = new Rectangle(10, 10, createPoint(0, 0));
     Circle *circ = new Circle(10, createPoint(0, 0), true);
 
+    Entity setted_color(0x00, createRect(0, 0, 0, 0), createRect(500, 0, 50, 50), renderer, "images/border.png");
+    ents.push_back(&setted_color);
+
+    auto change_setted_color_entity = [&setted_color](void *arg)
+    {
+        u32 *new_color = reinterpret_cast<u32 *>(arg);
+        if (*new_color != 0x00000000)
+        {
+            setted_color.setTexture(*new_color);
+        }
+    };
+
     Pen pen;
-    pen.changeStatus(PEN_STATUS_DRAW_NO);
+    pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
     pen.changeShape(rect);
     pen.changeColor(0x000000FF);
     pen.addCanvas(&canvas);
     pen.pinMouse(event_handler.getMouse());
 
     auto pen_listen_mouse = [&pen](void *arg)
-    { pen.listenEvents(arg); };
+    {
+        pen.listenEvents(arg);
+    };
+
     auto pen_change_color = [&pen](void *arg)
     {
         if (pen.nowEraser())
@@ -65,21 +91,30 @@ void Window::run(void)
             return;
         }
 
-        u32 *new_color = new u32; 
+        u32 *new_color = new u32;
         new_color = reinterpret_cast<u32 *>(arg);
         pen.changeColor(*new_color);
-        SDL_Event change_color_event;
-        change_color_event.type = SDL_USEREVENT;
-        change_color_event.user.code = BUTTON_CHANGE_COLOR_ENTITY;
-        change_color_event.user.data1 = new_color; SDL_PushEvent(&change_color_event); }; auto pen_increase_size = [&pen](void *arg)
-    { pen.increaseSize(*reinterpret_cast<u32 *>(arg)); };
+        sendNewColor(*new_color);
+    };
+
+    auto pen_increase_size = [&pen](void *arg)
+    {
+        pen.increaseSize(*reinterpret_cast<u32 *>(arg));
+    };
+
     auto pen_decrease_size = [&pen](void *arg)
-    { pen.decreaseSize(*reinterpret_cast<u32 *>(arg)); };
+    {
+        pen.decreaseSize(*reinterpret_cast<u32 *>(arg));
+    };
+
     auto pen_set_eraser = [&pen, &rect](void *arg)
     {
         pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
         pen.changeShape(rect);
-        pen.changeColor(color_eraser);
+        rect->setW(10);
+        rect->setH(10);
+        pen.changeColor(color_white);
+        sendNewColor(color_white);
     };
     auto pen_change_shape_rect = [&pen, &rect](void *arg)
     {
@@ -87,41 +122,58 @@ void Window::run(void)
         if (pen.nowEraser())
         {
             prev_color = color_t(0x000000FF);
+            sendNewColor(prev_color);
         }
         else
         {
             prev_color = pen.getShape(createPoint(0, 0))->getColor();
         }
         pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
+        rect->setW(10);
+        rect->setH(10);
         pen.changeShape(rect);
         pen.changeColor(prev_color);
     };
+
     auto pen_change_shape_circ = [&pen, &circ](void *arg)
     {
         color_t prev_color;
         if (pen.nowEraser())
         {
             prev_color = color_t(0x000000FF);
+            sendNewColor(prev_color);
         }
         else
         {
             prev_color = pen.getShape(createPoint(0, 0))->getColor();
         }
         pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
+        circ->setW(10);
+        circ->setH(10);
         pen.changeShape(circ);
         pen.changeColor(prev_color);
     };
+
     auto pen_set_draw_rectangle = [&pen, &rect](void *arg)
     {
+        if (pen.nowEraser())
+        {
+            pen.changeColor(color_black);
+            sendNewColor(color_black);
+        }
         pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
         pen.changeShape(rect);
-        pen.changeColor(color_black);
     };
+
     auto pen_set_draw_circle = [&pen, &circ](void *arg)
     {
+        if (pen.nowEraser())
+        {
+            pen.changeColor(color_black);
+            sendNewColor(color_black);
+        }
         pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
         pen.changeShape(circ);
-        pen.changeColor(color_black);
     };
 
     u32 change_pen_size = 3;
@@ -177,20 +229,8 @@ void Window::run(void)
     event_handler.addButton(&button_set_draw_rect);
     event_handler.addButton(&button_set_draw_circ);
 
-    Entity setted_color(0x00, createRect(0, 0, 0, 0), createRect(500, 0, 50, 50), renderer, "images/border.png");
-    ents.push_back(&setted_color);
-
-    auto change_setted_color_entity = [&setted_color](void *arg)
-    {
-        u32 *new_color = reinterpret_cast<u32 *>(arg);
-        if (*new_color != 0x00000000)
-        {
-            setted_color.setTexture(*new_color);
-        }
-    };
-
     event_handler.addEvent(BUTTON_SET_DRAW_RECTANGLE, pen_set_draw_rectangle, nullptr);
-    event_handler.addEvent(BUTTON_SET_DRAW_CIRCLE, pen_set_draw_circle, nullptr); 
+    event_handler.addEvent(BUTTON_SET_DRAW_CIRCLE, pen_set_draw_circle, nullptr);
     event_handler.addEvent(LISTEN_EVENT_ENTITY, pen_listen_mouse, nullptr);
     event_handler.addEvent(BUTTON_CHANGE_COLOR_ENTITY, change_setted_color_entity, nullptr);
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
@@ -220,7 +260,7 @@ void Window::run(void)
         {
             button->render();
         }
-        
+
         canvas.render();
 
         event_handler.run();

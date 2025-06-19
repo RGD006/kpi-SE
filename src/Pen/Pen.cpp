@@ -1,5 +1,6 @@
 #include "Pen.hpp"
 #include "SDL2/SDL_events.h"
+#include "ButtonEvents.hpp"
 #include <cassert>
 #include <bitset>
 #include <iostream>
@@ -124,7 +125,7 @@ void Pen::pinMouse(Mouse *mouse)
 
 bool Pen::nowEraser(void)
 {
-    return getShape(createPoint(0, 0))->getColor().a == 0x00;
+    return getShape(createPoint(0, 0))->getColor() == color_white;
 }
 
 void Pen::listenEvents(void *arg)
@@ -138,6 +139,7 @@ void Pen::listenEvents(void *arg)
 
     if (!calculateScale(canvas->getDest(), mouse_tip_scaled.x, mouse_tip_scaled.y))
     {
+        canvas->setAimTexture(nullptr);
         return;
     }
 
@@ -160,6 +162,11 @@ void Pen::listenEvents(void *arg)
         {
             canvas->addObject(shape);
         }
+
+        shape->setStartPoints(createPoint(mouse_tip.x, mouse_tip.y));
+        canvas->setAimTexture(shape);
+        continueRender();
+
         break;
 
     case PEN_STATUS_DRAW_SHAPE:
@@ -183,8 +190,8 @@ void Pen::listenEvents(void *arg)
             shape->setW(w);
             shape->setH(h);
 
-            std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
-                      << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
+            // std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
+            //           << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
         }
 
         if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_CLICK] && start_move)
@@ -221,20 +228,24 @@ void Pen::listenEvents(void *arg)
 
             shape->setStartPoints(createPoint(x, y));
             canvas->setAimTexture(shape);
-
-            // when mouse don't move SDL2 don't send event
-            // => send event which indicates that object is still drawing
-            SDL_Event event_continue_render;
-            event_continue_render.type = SDL_MOUSEMOTION;
-            SDL_PushEvent(&event_continue_render);
+            
+            continueRender();
         }
-
         break;
     case PEN_STATUS_DRAW_TEXTURE:
         break;
     case PEN_STATUS_DRAW_NO:
         break;
     }
+}
+
+// when mouse don't move SDL2 don't send event
+// => send event which indicates that object is still drawing
+void Pen::continueRender()
+{
+    SDL_Event event_continue_render;
+    event_continue_render.type = SDL_MOUSEMOTION;
+    SDL_PushEvent(&event_continue_render);
 }
 
 void Pen::changeStatus(PENSTATUS new_status)
