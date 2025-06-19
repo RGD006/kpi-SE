@@ -26,7 +26,7 @@ Button::Button(i32 event, SDL_Rect _size, SDL_Rect _dest, SDL_Renderer *_window_
 
 void Button::listenEvent(Mouse &mouse)
 {
-    if (mouse.getState(MOUSE_CLICK))
+    if (mouse.getState(MOUSE_END_CLICK))
     {
         // std::cout << "Mouse pressed " << mouse.getTipPos()->x << " " << mouse.getTipPos()->y << std::endl;
         if (SDL_HasIntersection(&destination_rect, mouse.getTipPos()) == SDL_TRUE)

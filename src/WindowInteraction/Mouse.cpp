@@ -64,7 +64,7 @@ std::bitset<MOUSE_STATE_SIZE> Mouse::getAllStates()
 
 void Mouse::endCallback(void)
 {
-    setState(MOUSE_CLICK, 0);
+    setState(MOUSE_END_CLICK, 0);
     setState(MOUSE_MOVING, 0);
     setState(MOUSE_START_CLICK, 0);
 }
@@ -94,14 +94,14 @@ void Mouse::pollEvents(SDL_Event *event)
         {
             setClickEndTime();
             setState(MOUSE_HOLDING, 0);
-            setState(MOUSE_CLICK, 1);
+            setState(MOUSE_END_CLICK, 1);
             SDL_GetMouseState(&tip->x, &tip->y);
         }
         else if (event->button.button == SDL_BUTTON_RIGHT)
         {
             setClickEndTime();
             setState(MOUSE_HOLDING, 0);
-            setState(MOUSE_CLICK, 1);
+            setState(MOUSE_END_CLICK, 1);
             SDL_GetMouseState(&tip->x, &tip->y);
         }
         break;

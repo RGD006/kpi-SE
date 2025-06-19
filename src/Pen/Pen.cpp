@@ -194,7 +194,7 @@ void Pen::listenEvents(void *arg)
             //           << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
         }
 
-        if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_CLICK] && start_move)
+        if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_END_CLICK] && start_move)
         {
             i32 x, y, w, h;
             x = std::min(start_draw_shape_x, mouse_tip_scaled.x);
