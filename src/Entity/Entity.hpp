@@ -21,6 +21,7 @@ public:
     virtual void setTexture(SDL_Texture *texture);
     virtual void setTexture(const char *path);
     virtual void setTexture(u32 color);
+    virtual SDL_Texture *getTexture(void);
     virtual void listenEvent(void);
     virtual void sendEvent(void);
     virtual void render(void);

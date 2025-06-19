@@ -99,3 +99,8 @@ Entity::~Entity()
         SDL_DestroyTexture(texture);
     }
 }
+
+SDL_Texture *Entity::getTexture(void)
+{
+    return texture;
+}
