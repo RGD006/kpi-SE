@@ -41,9 +41,6 @@ Entity::Entity(i32 button_event, SDL_Rect source, SDL_Rect destination, SDL_Rend
 
 void Entity::render()
 {
-    if (!texture)
-        throw "No texture";
-
     if (isEmptyRect(source_rect))
     {
         SDL_RenderCopy(renderer, texture, nullptr, &destination_rect);

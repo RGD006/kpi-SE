@@ -6,10 +6,11 @@
 
 void canvasUndo(void *arg);
 void canvasRedo(void *arg);
+void saveFile(void *arg);
 
 enum BUTTONEVENTS
 {
-   BUTTON_SAVE,
+   BUTTON_EXIT,
    BUTTON_CHANGE_COLOR_RED,
    BUTTON_CHANGE_COLOR_YELLOW,
    BUTTON_CHANGE_COLOR_BLUE,
@@ -31,6 +32,8 @@ enum BUTTONEVENTS
    BUTTON_CANVAS_REDO,
    BUTTON_CANVAS_UNDO,   
    BUTTON_FILL,
+   BUTTON_SAVE,
+   BUTTON_OPEN,
    BUTTON_BUF_SIZE,
 };
 

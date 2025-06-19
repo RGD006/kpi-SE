@@ -113,6 +113,8 @@ void Window::run(void)
     Button button_undo(BUTTON_CANVAS_UNDO, createRect(0, 0, 0, 0), createRect(0, 100, 100, 50), renderer, "images/undo.png");
     Button button_redo(BUTTON_CANVAS_REDO, createRect(0, 0, 0, 0), createRect(100, 100, 100, 50), renderer, "images/redo.png");
     Button button_fill(BUTTON_FILL, createRect(0, 0, 0, 0), createRect(350, 50, 50, 50), renderer, "images/fill.png");
+    Button button_save(BUTTON_SAVE, createRect(0, 0, 0, 0), createRect(0, 150, 50, 50), renderer, "images/save.png");
+    Button button_open(BUTTON_OPEN, createRect(0, 0, 0, 0), createRect(50, 150, 50, 50), renderer, "images/open.png");
 
     Pen pen;
     pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
@@ -253,7 +255,11 @@ void Window::run(void)
     ents.push_back(&button_undo);
     ents.push_back(&button_redo);
     ents.push_back(&button_fill);
+    ents.push_back(&button_save);
+    ents.push_back(&button_open);
 
+    event_handler.addButton(&button_save);
+    event_handler.addButton(&button_open);
     event_handler.addButton(&button_fill);
     event_handler.addButton(&button_undo);
     event_handler.addButton(&button_redo);
@@ -274,6 +280,7 @@ void Window::run(void)
     event_handler.addButton(&button_set_draw_rect);
     event_handler.addButton(&button_set_draw_circ);
 
+    event_handler.addEvent(BUTTON_SAVE, saveFile, &canvas);
     event_handler.addEvent(BUTTON_FILL, pen_change_fill, nullptr);
     event_handler.addEvent(BUTTON_CANVAS_REDO, canvasRedo, &canvas);
     event_handler.addEvent(BUTTON_CANVAS_UNDO, canvasUndo, &canvas);
@@ -283,7 +290,7 @@ void Window::run(void)
     event_handler.addEvent(LISTEN_EVENT_ENTITY, pen_listen_mouse, nullptr);
     event_handler.addEvent(ENTITY_CHANGE_COLOR_ENTITY, change_setted_color_entity, nullptr);
     event_handler.addEvent(SDL_QUIT, exitWindow, reinterpret_cast<void *>(&window_run));
-    event_handler.addEvent(BUTTON_SAVE, exitWindow, reinterpret_cast<void *>(&window_run));
+    event_handler.addEvent(BUTTON_EXIT, exitWindow, reinterpret_cast<void *>(&window_run));
     event_handler.addEvent(BUTTON_INCREASE_PEN_SIZE, pen_increase_size, reinterpret_cast<void *>(&change_pen_size));
     event_handler.addEvent(BUTTON_DECREASE_PEN_SIZE, pen_decrease_size, reinterpret_cast<void *>(&change_pen_size));
     event_handler.addEvent(BUTTON_CHANGE_COLOR_RED, pen_change_color, reinterpret_cast<void *>(&color_red));
@@ -301,7 +308,6 @@ void Window::run(void)
 
     while (window_run)
     {
-        // draw window background
         SDL_SetRenderDrawColor(renderer, 0xA0, 0xA0, 0xA0, 0xFF);
         SDL_RenderFillRect(renderer, &window_background);
 

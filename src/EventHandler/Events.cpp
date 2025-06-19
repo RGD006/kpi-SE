@@ -1,5 +1,8 @@
 #include "Events.hpp"
 #include <iostream>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <nfd.h>
 
 u32 color_red = 0xFF0000FF;
 u32 color_yellow = 0xFFFF00FF;
@@ -134,4 +137,42 @@ void canvasRedo(void *arg)
 {
     Canvas *canvas = reinterpret_cast<Canvas *>(arg);
     canvas->redo();
+}
+
+void saveFile(void *arg)
+{
+    Canvas *canvas = reinterpret_cast<Canvas *>(arg);
+    SDL_Texture *texture = canvas->getCanvasTexture();
+
+    nfdchar_t *outPath = nullptr;
+    nfdresult_t result = NFD_SaveDialog("bmp", nullptr, &outPath);
+    if (result != NFD_OKAY) {
+        if (result == NFD_CANCEL) {
+            SDL_Log("User canceled save dialog.");
+        } else {
+            SDL_Log("Error: %s", NFD_GetError());
+        }
+        return;
+    }
+
+    SDL_Renderer *renderer = canvas->getRenderer();
+    int width, height;
+    SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+
+    SDL_Texture *target = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+                                            SDL_TEXTUREACCESS_TARGET, width, height);
+
+    SDL_SetRenderTarget(renderer, target);
+    SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+
+    SDL_Surface *surface = SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, SDL_PIXELFORMAT_ARGB8888);
+    SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_ARGB8888, surface->pixels, surface->pitch);
+
+    if (SDL_SaveBMP(surface, outPath) != 0) {
+        SDL_Log("Failed to save file: %s", SDL_GetError());
+    }
+
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(target);
+    free(outPath);
 }
