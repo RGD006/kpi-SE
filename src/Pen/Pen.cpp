@@ -153,9 +153,10 @@ void Pen::listenEvents(void *arg)
             start_move = true;
             canvas->addObject(shape);
         }
-        else
+        else if (mouse_states[MOUSE_END_CLICK])
         {
             start_move = false;
+            canvas->saveCanvasTexture();
         }
 
         if (mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
@@ -189,9 +190,6 @@ void Pen::listenEvents(void *arg)
             shape->setStartPoints(createPoint(x, y));
             shape->setW(w);
             shape->setH(h);
-
-            // std::cout << "Start: " << start_draw_shape_x << " " << start_draw_shape_y << "\n"
-            //           << "Sizes " << shape->getW() << " " << shape->getH() << std::endl;
         }
 
         if (!mouse_states[MOUSE_HOLDING] && mouse_states[MOUSE_END_CLICK] && start_move)
@@ -207,6 +205,7 @@ void Pen::listenEvents(void *arg)
             shape->setH(h);
             start_move = false;
             canvas->addObject(getShape(*shape->getStartPoints()));
+            canvas->saveCanvasTexture();
             canvas->setAimTexture(nullptr);
             aim_start_draw_shape_x = 0;
             aim_start_draw_shape_y = 0;

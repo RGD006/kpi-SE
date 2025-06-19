@@ -1,6 +1,8 @@
 #include "Canvas.hpp"
 #include <iostream>
 
+#define MAX_QUEUE_SIZE (15)
+
 Canvas::Canvas()
     : Entity(createRect(0, 0, 0, 0), nullptr)
 {
@@ -49,6 +51,23 @@ void Canvas::addObject(Object *object)
     SDL_SetRenderTarget(renderer, canvas_texture);
     object->render(renderer);
     SDL_SetRenderTarget(renderer, nullptr);
+}
+
+void Canvas::saveCanvasTexture(void)
+{
+    SDL_Texture *new_prev_texture = Entity::copyTexture(renderer, canvas_texture, destination_rect.w, destination_rect.h);
+    
+    if (prev_canvas_texture.size() <= MAX_QUEUE_SIZE)
+    {
+        prev_canvas_texture.push(new_prev_texture);
+    }
+    else
+    {
+        SDL_Texture *delete_prev_texture = prev_canvas_texture.front();
+        prev_canvas_texture.pop();
+        SDL_DestroyTexture(delete_prev_texture);
+        prev_canvas_texture.push(new_prev_texture);
+    }
 }
 
 void Canvas::render()

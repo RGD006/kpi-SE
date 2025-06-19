@@ -117,3 +117,14 @@ SDL_Renderer *Entity::getRenderer(void)
 {
     return renderer;
 }
+
+SDL_Texture *Entity::copyTexture(SDL_Renderer *renderer, SDL_Texture *source, i32 width, i32 height)
+{
+    SDL_Texture *target = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+    SDL_SetTextureBlendMode(target, SDL_BLENDMODE_BLEND);
+    SDL_Texture *old_target = SDL_GetRenderTarget(renderer);
+    SDL_SetRenderTarget(renderer, target);
+    SDL_RenderCopy(renderer, source, nullptr, nullptr);
+    SDL_SetRenderTarget(renderer, old_target);
+    return target;
+}

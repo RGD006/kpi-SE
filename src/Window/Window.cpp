@@ -110,6 +110,8 @@ void Window::run(void)
     Button button_change_shape_circ(BUTTON_CHANGE_SHAPE_CIRC, createRect(0, 0, 0, 0), rect_change_pen_circ, renderer, "images/draw_circle.png");
     Button button_set_draw_rect(BUTTON_SET_DRAW_RECTANGLE, createRect(0, 0, 0, 0), rect_set_rectangle_shape, renderer, "images/rectangle.png");
     Button button_set_draw_circ(BUTTON_SET_DRAW_CIRCLE, createRect(0, 0, 0, 0), rect_set_circle_shape, renderer, "images/circle.png");
+    Button button_redo(BUTTON_CANVAS_REDO, createRect(0, 0, 0, 0), createRect(0, 100, 100, 50), renderer, "images/redo.png");
+    Button button_undo(BUtton_CANVAS_UNDO, createRect(0, 0, 0, 0), createRect(100, 100, 100, 50), renderer, "images/undo.png");
 
     Pen pen;
     pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
@@ -240,7 +242,11 @@ void Window::run(void)
     ents.push_back(&button_change_shape_circ);
     ents.push_back(&button_set_draw_rect);
     ents.push_back(&button_set_draw_circ);
+    ents.push_back(&button_undo);
+    ents.push_back(&button_redo);
 
+    event_handler.addButton(&button_undo);
+    event_handler.addButton(&button_redo);
     event_handler.addButton(&button_red);
     event_handler.addButton(&button_yellow);
     event_handler.addButton(&button_blue);
@@ -257,6 +263,7 @@ void Window::run(void)
     event_handler.addButton(&button_change_shape_circ);
     event_handler.addButton(&button_set_draw_rect);
     event_handler.addButton(&button_set_draw_circ);
+
 
     event_handler.addEvent(ENTITY_CHANGE_INSTRUMENT, change_setted_instrument_entity, nullptr);
     event_handler.addEvent(BUTTON_SET_DRAW_RECTANGLE, pen_set_draw_rectangle, nullptr);

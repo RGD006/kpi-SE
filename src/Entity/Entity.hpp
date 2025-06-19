@@ -30,5 +30,6 @@ public:
     virtual void render(void);
     virtual SDL_Renderer *getRenderer(void);
     virtual SDL_Rect getDest(void);
+    static SDL_Texture *copyTexture(SDL_Renderer *renderer, SDL_Texture *source, i32 width, i32 height);
     ~Entity();
 };

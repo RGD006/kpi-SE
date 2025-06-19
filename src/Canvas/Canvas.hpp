@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL_render.h>
 #include <queue>
+#include <deque>
 
 #include "Object.hpp"
 #include "Entity.hpp"
@@ -12,12 +13,15 @@ private:
     SDL_Texture *background_texture; 
     SDL_Texture *canvas_texture;
     SDL_Texture *aim_texture; 
+    std::queue<SDL_Texture *> prev_canvas_texture;
+    std::queue<SDL_Texture *> undo_canvas_texture;
 
 public:
     Canvas(SDL_Renderer *, SDL_Point, int, int);
     Canvas();
     void render();
     SDL_Texture *getCanvasTexture();
+    void saveCanvasTexture(void);
     void setBackground(color_t, SDL_Rect *);
     void setAimTexture(Object *);
     void addObject(Object *);
