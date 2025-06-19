@@ -280,6 +280,7 @@ void Window::run(void)
     event_handler.addButton(&button_set_draw_rect);
     event_handler.addButton(&button_set_draw_circ);
 
+    event_handler.addEvent(BUTTON_OPEN, openFile, &canvas);
     event_handler.addEvent(BUTTON_SAVE, saveFile, &canvas);
     event_handler.addEvent(BUTTON_FILL, pen_change_fill, nullptr);
     event_handler.addEvent(BUTTON_CANVAS_REDO, canvasRedo, &canvas);

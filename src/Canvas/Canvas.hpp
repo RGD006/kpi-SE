@@ -25,6 +25,7 @@ public:
     void saveCanvasRedo(SDL_Texture *texture);
     void saveCanvasUndo(SDL_Texture *texture);
     void setBackground(color_t, SDL_Rect *);
+    void setBackgroundTexture(SDL_Texture *texture);
     void setAimTexture(Object *);
     void addObject(Object *);
     void fillAt(i32 x, i32 y, color_t fill_color);

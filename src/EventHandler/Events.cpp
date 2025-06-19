@@ -103,7 +103,7 @@ SDL_Rect rect_change_pen_rect = {
     .x = 150,
     .y = 50,
     .w = 50,
-    .h = 50, 
+    .h = 50,
 };
 
 SDL_Rect rect_change_pen_circ = {
@@ -146,10 +146,14 @@ void saveFile(void *arg)
 
     nfdchar_t *outPath = nullptr;
     nfdresult_t result = NFD_SaveDialog("bmp", nullptr, &outPath);
-    if (result != NFD_OKAY) {
-        if (result == NFD_CANCEL) {
+    if (result != NFD_OKAY)
+    {
+        if (result == NFD_CANCEL)
+        {
             SDL_Log("User canceled save dialog.");
-        } else {
+        }
+        else
+        {
             SDL_Log("Error: %s", NFD_GetError());
         }
         return;
@@ -168,11 +172,47 @@ void saveFile(void *arg)
     SDL_Surface *surface = SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, SDL_PIXELFORMAT_ARGB8888);
     SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_ARGB8888, surface->pixels, surface->pitch);
 
-    if (SDL_SaveBMP(surface, outPath) != 0) {
+    if (SDL_SaveBMP(surface, outPath) != 0)
+    {
         SDL_Log("Failed to save file: %s", SDL_GetError());
     }
 
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(target);
+    free(outPath);
+}
+
+void openFile(void *arg)
+{
+    Canvas *canvas = reinterpret_cast<Canvas *>(arg);
+
+    nfdchar_t *outPath = nullptr;
+    nfdresult_t result = NFD_OpenDialog("png", nullptr, &outPath);
+    if (result != NFD_OKAY)
+    {
+        if (result == NFD_CANCEL)
+        {
+            SDL_Log("User canceled open dialog.");
+        }
+        else
+        {
+            SDL_Log("Open error: %s", NFD_GetError());
+        }
+        return;
+    }
+
+    SDL_Renderer *renderer = canvas->getRenderer(); // передбачаємо, що Canvas має getRenderer()
+    SDL_Texture *background = IMG_LoadTexture(renderer, outPath);
+
+    if (!background)
+    {
+        SDL_Log("Failed to load PNG: %s", IMG_GetError());
+        free(outPath);
+        return;
+    }
+
+    // Встановлюємо текстуру як фон canvas-а
+    canvas->setBackgroundTexture(background);
+
     free(outPath);
 }

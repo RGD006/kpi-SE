@@ -7,6 +7,7 @@
 void canvasUndo(void *arg);
 void canvasRedo(void *arg);
 void saveFile(void *arg);
+void openFile(void *arg);
 
 enum BUTTONEVENTS
 {

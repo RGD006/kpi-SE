@@ -147,8 +147,8 @@ void Canvas::undo(void)
     {
         SDL_Texture *prev = undo_canvas_texture.front();
         undo_canvas_texture.pop_front();
-        
-        canvas_texture = Entity::copyTexture(renderer, prev, destination_rect.w, destination_rect.h); 
+
+        canvas_texture = Entity::copyTexture(renderer, prev, destination_rect.w, destination_rect.h);
 
         saveCanvasRedo(canvas_texture);
 
@@ -241,4 +241,9 @@ void Canvas::fillAt(i32 x, i32 y, color_t fill_color)
     SDL_RenderCopy(renderer, result, nullptr, nullptr);
     SDL_SetRenderTarget(renderer, nullptr);
     SDL_DestroyTexture(result);
+}
+
+void Canvas::setBackgroundTexture(SDL_Texture *texture)
+{
+    background_texture = texture;
 }
