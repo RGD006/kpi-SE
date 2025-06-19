@@ -170,7 +170,7 @@ void Pen::listenEvents(void *arg)
         break;
 
     case PEN_STATUS_DRAW_SHAPE:
-        if (!mouse_states[MOUSE_MOVING] && mouse_states[MOUSE_HOLDING])
+        if (mouse_states[MOUSE_START_CLICK] && mouse_states[MOUSE_HOLDING])
         {
             start_draw_shape_x = mouse_tip_scaled.x;
             start_draw_shape_y = mouse_tip_scaled.y;
