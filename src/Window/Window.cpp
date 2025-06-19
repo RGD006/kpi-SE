@@ -110,8 +110,8 @@ void Window::run(void)
     Button button_change_shape_circ(BUTTON_CHANGE_SHAPE_CIRC, createRect(0, 0, 0, 0), rect_change_pen_circ, renderer, "images/draw_circle.png");
     Button button_set_draw_rect(BUTTON_SET_DRAW_RECTANGLE, createRect(0, 0, 0, 0), rect_set_rectangle_shape, renderer, "images/rectangle.png");
     Button button_set_draw_circ(BUTTON_SET_DRAW_CIRCLE, createRect(0, 0, 0, 0), rect_set_circle_shape, renderer, "images/circle.png");
-    Button button_redo(BUTTON_CANVAS_REDO, createRect(0, 0, 0, 0), createRect(0, 100, 100, 50), renderer, "images/redo.png");
-    Button button_undo(BUtton_CANVAS_UNDO, createRect(0, 0, 0, 0), createRect(100, 100, 100, 50), renderer, "images/undo.png");
+    Button button_undo(BUtton_CANVAS_UNDO, createRect(0, 0, 0, 0), createRect(0, 100, 100, 50), renderer, "images/undo.png");
+    Button button_redo(BUTTON_CANVAS_REDO, createRect(0, 0, 0, 0), createRect(100, 100, 100, 50), renderer, "images/redo.png");
 
     Pen pen;
     pen.changeStatus(PEN_STATUS_DRAW_PIXEL);
