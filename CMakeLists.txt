@@ -10,6 +10,13 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
 FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git 
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(googletest)
+
+FetchContent_Declare(
     nfd
     GIT_REPOSITORY https://github.com/mlabbe/nativefiledialog.git
     GIT_TAG        master
@@ -79,3 +86,41 @@ target_link_libraries(bitmap_graphic PRIVATE
     SDL2 SDL2_image
     nfd
 )
+
+enable_testing()
+
+add_executable(bitmap_graphic_test
+    src/Window/Window.cpp
+    src/Object/Object.cpp
+    src/Shapes/Rectangle.cpp
+    src/Shapes/Circle.cpp
+    src/EventHandler/EventHandler.cpp
+    src/Canvas/Canvas.cpp
+    src/Pen/Pen.cpp
+    src/WindowInteraction/Button.cpp
+    src/WindowInteraction/Mouse.cpp
+    src/EventHandler/Events.cpp
+    src/Entity/Entity.cpp
+    tests/test_main.cpp  
+)
+
+target_include_directories(bitmap_graphic_test PRIVATE
+    src
+    src/Window
+    src/Object
+    src/Shapes
+    src/Pen
+    src/Canvas
+    src/EventHandler
+    src/WindowInteraction
+    src/Entity
+)
+
+target_link_libraries(bitmap_graphic_test
+    gtest_main
+    SDL2 SDL2_image
+    nfd
+)
+
+include(GoogleTest)
+gtest_discover_tests(bitmap_graphic_test)
