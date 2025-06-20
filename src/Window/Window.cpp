@@ -66,7 +66,7 @@ void Window::run(void)
         .h = height,
     };
 
-    color_t color_canvas_background(0xFFFFFFFF);
+    color_t color_canvas_background(0xC6C6C6FF);
 
     canvas.setBackground(color_canvas_background, &canvas_background);
 
