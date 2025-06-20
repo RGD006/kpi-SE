@@ -87,6 +87,60 @@ TEST(EventHandlerTest, AddAndRunEvents) {
     EXPECT_TRUE(called);
 }
 
+TEST(PenIntegrationTest, DrawShapeAfterMouseMove) {
+    Canvas canvas(SDLMock::MockRenderer(), createPoint(0, 0), 500, 500);
+    Pen pen(color_t(0, 255, 0, 255));
+
+    Mouse mouse;
+    pen.addCanvas(&canvas);
+    pen.pinMouse(&mouse);
+
+    pen.changeStatus(PEN_STATUS_DRAW_SHAPE);
+
+    mouse.setState(MOUSE_START_CLICK, 1);
+    pen.getMoveState()[0] = true; 
+
+    pen.listenEvents(nullptr);
+
+    ASSERT_EQ(pen.getStatus(), PEN_STATUS_DRAW_SHAPE);
+    ASSERT_TRUE(pen.getMoveState()[0]); 
+}
+
+TEST(FunctionalTest, ButtonEventChangesPenStatus) {
+    SDL_Window* window = SDL_CreateWindow("test", 0, 0, 100, 100, SDL_WINDOW_HIDDEN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+
+    Pen pen;
+    EventHandler handler;
+
+    Button* button = new Button(
+        42,
+        SDL_Rect{0, 0, 10, 10},
+        SDL_Rect{0, 0, 10, 10},
+        renderer,
+        0xAAAAAAFF
+    );
+
+    handler.addButton(button);
+
+    handler.addEvent(42, [](void* arg) {
+        Pen* pen = static_cast<Pen*>(arg);
+        pen->changeStatus(PEN_STATUS_FILL);
+    }, &pen);
+
+    Mouse* mouse = handler.getMouse();
+    mouse->setState(MOUSE_END_CLICK, 1);
+    button->listenEvent(*mouse);
+
+    handler.run();
+
+    ASSERT_EQ(pen.getStatus(), PEN_STATUS_FILL);
+
+    delete button;
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+}
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::AddGlobalTestEnvironment(new SDLTestEnvironment);
