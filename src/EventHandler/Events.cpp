@@ -201,18 +201,43 @@ void openFile(void *arg)
         return;
     }
 
-    SDL_Renderer *renderer = canvas->getRenderer(); // передбачаємо, що Canvas має getRenderer()
-    SDL_Texture *background = IMG_LoadTexture(renderer, outPath);
+    SDL_Renderer *renderer = canvas->getRenderer(); 
+    SDL_Texture *loaded = IMG_LoadTexture(renderer, outPath);
 
-    if (!background)
+    if (!loaded)
     {
         SDL_Log("Failed to load PNG: %s", IMG_GetError());
         free(outPath);
         return;
     }
 
-    // Встановлюємо текстуру як фон canvas-а
-    canvas->setBackgroundTexture(background);
+    i32 width, height;
+    SDL_QueryTexture(loaded, nullptr, nullptr, &width, &height);
 
+    SDL_Texture *target = SDL_CreateTexture(
+        renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_TARGET,
+        width,
+        height
+    );
+
+    if (!target)
+    {
+        SDL_Log("Failed to create render target: %s", SDL_GetError());
+        SDL_DestroyTexture(loaded);
+        free(outPath);
+        return;
+    }
+
+    SDL_SetRenderTarget(renderer, target);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, loaded, nullptr, nullptr);
+    SDL_SetRenderTarget(renderer, nullptr); 
+
+    canvas->setCanvasTexture(target);
+    canvas->setScale(createRect(canvas->getDest().x, canvas->getDest().y, width, height));
+
+    SDL_DestroyTexture(loaded);
     free(outPath);
 }

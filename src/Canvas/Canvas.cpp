@@ -247,3 +247,13 @@ void Canvas::setBackgroundTexture(SDL_Texture *texture)
 {
     background_texture = texture;
 }
+
+void Canvas::setCanvasTexture(SDL_Texture *texture)
+{
+    canvas_texture = texture;
+}
+
+void Canvas::setScale(SDL_Rect new_scale)
+{
+    destination_rect = new_scale;
+}
